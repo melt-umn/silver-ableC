@@ -2,7 +2,7 @@
 
 set -eu
 
-INCLUDE_DIRS=(grammars ../../ableC/grammars ../*/grammars)
+INCLUDE_DIRS=(../../ableC/grammars ../*/grammars)
 INCLUDES=${INCLUDE_DIRS[@]/#/-I ../}
 
 mkdir -p build
