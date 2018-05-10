@@ -1,3 +1,6 @@
 #!/bin/bash
 
-silver -o ableCSilverMDA.jar -I grammars $@ edu:umn:cs:melt:exts:silver:ableC:mda_test
+mkdir -p build
+cd build
+
+silver -I ../grammars -I ../../../ableC/grammars $@ edu:umn:cs:melt:exts:silver:ableC:mda_test
