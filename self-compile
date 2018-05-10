@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eu
+
+INCLUDE_DIRS=(grammars ../../ableC/grammars ../*/grammars)
+INCLUDES=${INCLUDE_DIRS[@]/#/-I ../}
+
+mkdir -p build
+cd build
+
+silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar $INCLUDES $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_all
+mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
