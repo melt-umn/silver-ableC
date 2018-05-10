@@ -1,0 +1,34 @@
+#!/bin/bash
+
+case `uname` in
+*Darwin*)
+  READLINK=greadlink
+  if [ ! -f `which greadlink` ]; then
+    echo "Missing greadlink. Please install coreutils:"
+    echo -e "\tbrew install coreutils"
+    exit 4
+  fi
+  ;;
+*)
+  READLINK=readlink
+  ;;
+esac
+
+# ~/bin/silver-ableC should be a link to somewhere, find out where!
+ME=$(${READLINK} -f "${BASH_SOURCE}")
+
+# Set our home
+export SILVER_ABLEC_HOME=${ME/support\/bin\/silver-ableC/}
+
+# Find the silver-ableC jar
+SILVER_ABLEC="$SILVER_ABLEC_HOME/jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar"
+
+if [ ! -f "$SILVER_ABLEC" ]; then
+  echo "Couldn't find the Silver-ableC jar to execute, aborting."
+  exit 2
+fi
+
+# Invoke Silver using the found jar
+silver-custom $SILVER_ABLEC $@
+
+
