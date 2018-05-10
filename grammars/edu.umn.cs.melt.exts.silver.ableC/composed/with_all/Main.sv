@@ -40,6 +40,7 @@ parser svParse::Root {
   edu:umn:cs:melt:exts:silver:ableC;
   
   edu:umn:cs:melt:exts:ableC:closure;
+  edu:umn:cs:melt:exts:ableC:templating;
 }
 
 parser sviParse::IRoot {
