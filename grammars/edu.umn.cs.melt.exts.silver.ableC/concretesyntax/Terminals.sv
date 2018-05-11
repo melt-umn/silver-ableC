@@ -12,6 +12,7 @@ terminal EscapeInitializer_t  '$Initializer'  lexer classes {Ckeyword};
 terminal EscapeExprs_t        '$Exprs'        lexer classes {Ckeyword};
 terminal EscapeExpr_t         '$Expr'         lexer classes {Ckeyword};
 terminal EscapeName_t         '$Name'         lexer classes {Ckeyword};
+terminal EscapeTypedefName_t  '$TypedefName'  lexer classes {Ckeyword};
 terminal EscapeParameters_t   '$Parameters'   lexer classes {Ckeyword};
 terminal EscapeBaseTypeExpr_t '$BaseTypeExpr' lexer classes {Ckeyword};
 terminal EscapeAttrib_t       '$Attrib'       lexer classes {Ckeyword}, dominates {AttributeNameUnfetterdByKeywords_t};

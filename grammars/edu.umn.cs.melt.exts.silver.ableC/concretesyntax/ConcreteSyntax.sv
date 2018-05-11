@@ -21,31 +21,37 @@ concrete productions top::Expr
   { forwards to ableCExprLiteral(cst.ast, location=top.location); }
 
 -- AbleC-to-Silver bridge productions
-concrete production escapeStmt_c
-top::BlockItem_c ::= '$Stmt' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-{ top.ast = [escapeStmt(e)]; }
-concrete production escapeInitializer_c
-top::Initializer_c ::= '$Initializer' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-{ top.ast = escapeInitializer(e); }
-concrete production escapeExprs_c
-top::AssignExpr_c ::= '$Exprs' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+concrete productions top::BlockItem_c
+| '$Stmt' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = [escapeStmt(e)]; }
+concrete productions top::Initializer_c
+| '$Initializer' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeInitializer(e); }
+concrete productions top::PrimaryExpr_c
+| '$Exprs' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeExprs(e, location=top.location); }
-concrete production escapeExpr_c
-top::AssignExpr_c ::= '$Expr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+concrete productions top::PrimaryExpr_c
+| '$Expr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeExpr(e, location=top.location); }
-{-concrete production escapeName_c
-top::Name_c ::= '$Name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-  { top.ast = escapeName(e, location=top.location); }-}
-{-concrete production escapeParameters_c
-top::ParameterList_c ::= '$Parameters' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-{ top.ast = escapeParameters(e, location=top.location); }-}
-concrete production escapeBaseTypeExpr_c
-top::TypeSpecifier_c ::= '$BaseTypeExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-{
-  top.realTypeSpecifiers = [escapeBaseTypeExpr(e)];
-  top.preTypeSpecifiers = [];
-}
-concrete production escapeAttrib_c
-top::Attrib_c ::= '$Attrib' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-{ top.ast = escapeAttrib(e); }
+concrete productions top::Identifier_c
+| '$Name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeName(e, location=top.location); }
+concrete productions top::TypeIdName_c
+| '$TypedefName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeName(e, location=top.location); }
+concrete productions top::ParameterDeclaration_c
+| '$Parameters' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  {
+    top.declaredIdents = [];
+    top.ast = escapeParameters(e);
+  }
+concrete productions top::TypeSpecifier_c
+| '$BaseTypeExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  {
+    top.realTypeSpecifiers = [escapeBaseTypeExpr(e)];
+    top.preTypeSpecifiers = [];
+  }
+concrete productions top::Attrib_c
+| '$Attrib' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeAttrib(e); }
   

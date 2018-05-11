@@ -74,12 +74,18 @@ top::ableC:Name ::= e::Expr
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
-abstract production escapeParameters
-top::ableC:Parameters ::= e::Expr
+abstract production escapeTypedefName
+top::ableC:Name ::= e::Expr
 {
-  -- TODO
-  top.pps = [pp"$$Parameters{${text(e.pp)}}"];
-  forwards to ableC:nilParameters();
+  top.pp = pp"$$TypedefName{${text(e.pp)}}";
+  forwards to ableC:name("<unknown type name>", location=builtin);
+}
+
+abstract production escapeParameters
+top::ableC:ParameterDecl ::= e::Expr
+{
+  top.pp = pp"$$Parameters{${text(e.pp)}}";
+  forwards to error("TODO: forward value for escapeParameters");
 }
 
 abstract production escapeBaseTypeExpr
