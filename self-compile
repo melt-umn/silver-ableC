@@ -5,8 +5,13 @@ set -eu
 INCLUDE_DIRS=(../../ableC/grammars ../*/grammars)
 INCLUDES=${INCLUDE_DIRS[@]/#/-I ../}
 
+SV_BUILD_TARGET=${SV_BUILD_TARGET:-"edu:umn:cs:melt:exts:silver:ableC:composed:with_all"}
+
 mkdir -p build
 cd build
 
-silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar $INCLUDES $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_all
-mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
+silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar $INCLUDES $@ ${SV_BUILD_TARGET}
+
+if [ -f edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ]; then
+    mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
+fi

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -eu
+
+# Make sure any compiler changes make it before we build
+./self-compile
+
+# Rebuild the IDE-specific runtime jars
+cd ../../silver/runtime/imp
+./build.sh
+cd ../../../extensions/silver-ableC
+
+# Create plug-in sources and .class files.
+# this creates an edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all.jar that is not used, but
+# this does create stuff in the generated directory that is used in the next step
+SV_BUILD_TARGET="edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all" ./self-compile --clean
+
+# Create the Eclipse repository.  
+# The repository is in the generated/ide/edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all
+# directory.  
+cd ../../silver/generated/ide/edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all
+mvn package
+
+TARGET=$(pwd)/updatesite/target/repository
+
+echo "..."
+echo "..."
+echo "..."
+echo "Be sure to increment IDE version number in edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all"
+echo "..."
+echo "..."
+echo "Reminder: add $TARGET as path to find update site in eclipse, if using directly"
+echo "..."
+
