@@ -5,6 +5,8 @@ set -eu
 INCLUDE_DIRS=(../../ableC/grammars ../*/grammars)
 INCLUDES=${INCLUDE_DIRS[@]/#/-I ../}
 
+export SVJVM_FLAGS="-Xmx3000M -Xss10M"
+
 mkdir -p jars
 mkdir -p build
 cd build
