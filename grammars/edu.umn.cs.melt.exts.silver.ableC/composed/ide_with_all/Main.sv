@@ -42,9 +42,9 @@ temp_imp_ide_dcl svParse ".sv" {
   }
 
   name "Silver-ableC";
-  version "0.1.0";
-  resource grammars "../../../../grammars/"; -- I have "../grammars" to be explicit about what's going on here.
-  resource jars     "../../../../jars/";
+  version "0.1.1";
+  resource grammars "../../../../../../silver/grammars/";
+  resource jars     "../../../../../../silver/jars/";
 }
 
 -- Declarations of IDE functions referred in decl block.
