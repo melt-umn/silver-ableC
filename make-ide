@@ -26,7 +26,7 @@ TARGET=$(pwd)/updatesite/target/repository
 echo "..."
 echo "..."
 echo "..."
-echo "Be sure to increment IDE version number in edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all"
+echo "Be sure to increment IDE version number in edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all:Main.sv"
 echo "..."
 echo "..."
 echo "Reminder: add $TARGET as path to find update site in eclipse, if using directly"

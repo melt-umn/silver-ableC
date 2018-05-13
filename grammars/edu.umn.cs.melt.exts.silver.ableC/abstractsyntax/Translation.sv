@@ -17,6 +17,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStmt",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeInitializer",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExpr",
+         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeName",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeBaseTypeExpr",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeAttrib"])
     then
@@ -58,6 +59,18 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | _, _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
       end
     else case prodName, children, annotations of
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeType",
+      consAST(a, nilAST()), nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              builtin,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
+              [e])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeType", _, _ ->
+        error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
       consAST(
         nonterminalAST(
@@ -73,7 +86,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", _, _ ->
-      error(s"Unexpected escape production: ${show(80, top.pp)}")
+        error(s"Unexpected escape production: ${show(80, top.pp)}")
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
       consAST(
         nonterminalAST(
@@ -90,19 +103,19 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters", _, _ ->
-      error(s"Unexpected escape production: ${show(80, top.pp)}")
+        error(s"Unexpected escape production: ${show(80, top.pp)}")
     -- Default
     | _, _, _ ->
-      application(
-        baseExpr(makeQName(prodName), location=builtin),
-        '(',
-        foldAppExprs(builtin, reverse(children.translation)),
-        ',',
-        foldl(
-          snocAnnoAppExprs(_, ',', _, location=builtin),
-          emptyAnnoAppExprs(location=builtin),
-          reverse(annotations.translation)),
-        ')', location=builtin)
+        application(
+          baseExpr(makeQName(prodName), location=builtin),
+          '(',
+          foldAppExprs(builtin, reverse(children.translation)),
+          ',',
+          foldl(
+            snocAnnoAppExprs(_, ',', _, location=builtin),
+            emptyAnnoAppExprs(location=builtin),
+            reverse(annotations.translation)),
+          ')', location=builtin)
      end;
 }
 

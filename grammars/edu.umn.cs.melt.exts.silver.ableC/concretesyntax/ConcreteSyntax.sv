@@ -45,10 +45,19 @@ concrete productions top::ParameterDeclaration_c
     top.declaredIdents = [];
     top.ast = escapeParameters(e);
   }
+concrete productions top::TypeName_c
+| '$TypeName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeTypeName(e); }
 concrete productions top::TypeSpecifier_c
 | '$BaseTypeExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   {
     top.realTypeSpecifiers = [escapeBaseTypeExpr(e)];
+    top.preTypeSpecifiers = [];
+  }
+concrete productions top::TypeSpecifier_c
+| '$Type' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  {
+    top.realTypeSpecifiers = [escapeType(e)];
     top.preTypeSpecifiers = [];
   }
 concrete productions top::Attrib_c

@@ -88,10 +88,24 @@ top::ableC:ParameterDecl ::= e::Expr
   forwards to error("TODO: forward value for escapeParameters");
 }
 
+abstract production escapeTypeName
+top::ableC:TypeName ::= e::Expr
+{
+  top.pp = pp"$$TypeName{${text(e.pp)}}";
+  forwards to ableC:typeName(ableC:errorTypeExpr([]), ableC:baseTypeExpr());
+}
+
 abstract production escapeBaseTypeExpr
 top::ableC:BaseTypeExpr ::= e::Expr
 {
   top.pp = pp"$$BaseTypeExpr{${text(e.pp)}}";
+  forwards to ableC:errorTypeExpr([]);
+}
+
+abstract production escapeType
+top::ableC:BaseTypeExpr ::= e::Expr
+{
+  top.pp = pp"$$Type{${text(e.pp)}}";
   forwards to ableC:errorTypeExpr([]);
 }
 

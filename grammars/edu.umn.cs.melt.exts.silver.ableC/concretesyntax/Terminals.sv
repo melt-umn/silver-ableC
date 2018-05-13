@@ -14,7 +14,9 @@ terminal EscapeExpr_t         '$Expr'         lexer classes {Ckeyword};
 terminal EscapeName_t         '$Name'         lexer classes {Ckeyword};
 terminal EscapeTypedefName_t  '$TypedefName'  lexer classes {Ckeyword};
 terminal EscapeParameters_t   '$Parameters'   lexer classes {Ckeyword};
+terminal EscapeTypeName_t     '$TypeName'     lexer classes {Ckeyword};
 terminal EscapeBaseTypeExpr_t '$BaseTypeExpr' lexer classes {Ckeyword};
+terminal EscapeType_t         '$Type'         lexer classes {Ckeyword};
 terminal EscapeAttrib_t       '$Attrib'       lexer classes {Ckeyword}, dominates {AttributeNameUnfetterdByKeywords_t};
 
 -- Workarounds for weirdness with ignore terminals
