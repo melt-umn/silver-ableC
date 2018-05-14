@@ -2,13 +2,23 @@ grammar edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 
 imports silver:reflect;
 
-synthesized attribute translation<a>::a;
+function translate
+Expr ::= loc::Location ast::AST
+{
+  ast.givenLocation = loc;
+  return ast.translation;
+}
 
-attribute translation<Expr> occurs on AST;
+synthesized attribute translation<a>::a;
+synthesized attribute foundLocation::Maybe<Location>;
+autocopy attribute givenLocation::Location;
+
+attribute givenLocation, translation<Expr> occurs on AST;
 
 aspect production nonterminalAST
 top::AST ::= prodName::String children::ASTs annotations::NamedASTs
 {
+  local givenLocation::Location = fromMaybe(top.givenLocation, annotations.foundLocation);
   top.translation =
     -- "Direct" escape productions
     if
@@ -17,6 +27,8 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStmt",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeInitializer",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExpr",
+         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName",
+         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTName",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeName",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeBaseTypeExpr",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeAttrib"])
@@ -29,15 +41,43 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
           end
       | _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
       end
-    else case prodName, children, annotations of
     -- "Indirect" escape productions
+    else if
+      containsBy(
+        stringEq, prodName,
+        ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escape_name",
+         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escape_tname"])
+    then
+      case children, annotations of
+      | consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
+          case reify(a) of
+          | right(e) ->
+              application(
+                baseExpr(
+                  makeQName("edu:umn:cs:melt:ableC:abstractsyntax:host:name", givenLocation),
+                  location=givenLocation),
+                '(',
+                foldAppExprs(givenLocation, [e]),
+                ',',
+                oneAnnoAppExprs(
+                  annoExpr(
+                    makeQName("location", givenLocation), '=',
+                    presentAppExpr(locAST.translation, location=givenLocation),
+                    location=givenLocation),
+                  location=givenLocation),
+                ')', location=givenLocation)
+          | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+          end
+      | _, _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
+      end
+    else case prodName, children, annotations of
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr",
       consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
         case reify(a) of
         | right(e) ->
             mkStrFunctionInvocation(
-              builtin,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:mkIntConst",
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst",
               [e, locAST.translation])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
@@ -48,43 +88,19 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         case reify(a) of
         | right(e) ->
             mkStrFunctionInvocation(
-              builtin,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:mkStringConst",
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst",
               [e, locAST.translation])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr", _, _ ->
         error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName",
-      consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
-        case reify(a) of
-        | right(e) ->
-            application(
-              baseExpr(
-                makeQName("edu:umn:cs:melt:ableC:abstractsyntax:host:name"),
-                location=builtin),
-              '(',
-              foldAppExprs(builtin, [e]),
-              ',',
-              oneAnnoAppExprs(
-                annoExpr(
-                  makeQName("location"), '=',
-                  presentAppExpr(locAST.translation, location=builtin),
-                  location=builtin),
-                location=builtin),
-              ')', location=builtin)
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName", _, _ ->
-        error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr",
-      consAST(a, nilAST()), nilNamedAST() ->
+      consAST(a, consAST(locAST, nilAST())), nilNamedAST() ->
         case reify(a) of
         | right(e) ->
             mkStrFunctionInvocation(
-              builtin,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
-              [e])
+              givenLocation, "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr", [e])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr", _, _ ->
@@ -93,13 +109,15 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
       consAST(
         nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", consAST(a, nilAST()), _),
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs",
+          consAST(a, nilAST()),
+          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
         consAST(rest, nilAST())),
         nilNamedAST() ->
         case reify(a) of
         | right(e) ->
             mkStrFunctionInvocation(
-              builtin,
+              givenLocation,
               "edu:umn:cs:melt:ableC:abstractsyntax:host:appendExprs",
               [e, rest.translation])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
@@ -110,13 +128,14 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       consAST(
         nonterminalAST(
           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters",
-          consAST(a, nilAST()), _),
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
         consAST(rest, nilAST())),
         nilNamedAST() ->
         case reify(a) of
         | right(e) ->
             mkStrFunctionInvocation(
-              builtin,
+              givenLocation,
               "edu:umn:cs:melt:ableC:abstractsyntax:host:appendParameters",
               [e, rest.translation])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
@@ -126,16 +145,19 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     -- Default
     | _, _, _ ->
         application(
-          baseExpr(makeQName(prodName), location=builtin),
+          baseExpr(makeQName(prodName, givenLocation), location=givenLocation),
           '(',
-          foldAppExprs(builtin, reverse(children.translation)),
+          foldAppExprs(givenLocation, reverse(children.translation)),
           ',',
           foldl(
-            snocAnnoAppExprs(_, ',', _, location=builtin),
-            emptyAnnoAppExprs(location=builtin),
+            snocAnnoAppExprs(_, ',', _, location=givenLocation),
+            emptyAnnoAppExprs(location=givenLocation),
             reverse(annotations.translation)),
-          ')', location=builtin)
-     end;
+          ')', location=givenLocation)
+    end;
+    
+    children.givenLocation = givenLocation;
+    annotations.givenLocation = givenLocation;
 }
 
 aspect production listAST
@@ -144,29 +166,34 @@ top::AST ::= vals::ASTs
   top.translation =
     fullList(
       '[',
-      foldr(exprsCons(_, ',', _, location=builtin), exprsEmpty(location=builtin), vals.translation),
-      ']', location=builtin);
+      foldr(
+        exprsCons(_, ',', _, location=top.givenLocation),
+        exprsEmpty(location=top.givenLocation),
+        vals.translation),
+      ']', location=top.givenLocation);
 }
 
 aspect production stringAST
 top::AST ::= s::String
 {
   top.translation =
-    stringConst(terminal(String_t, s"\"${escapeString(s)}\"", builtin), location=builtin);
+    stringConst(
+      terminal(String_t, s"\"${escapeString(s)}\"", top.givenLocation),
+      location=top.givenLocation);
 }
 
 aspect production integerAST
 top::AST ::= i::Integer
 {
   top.translation =
-    intConst(terminal(Int_t, toString(i), builtin), location=builtin);
+    intConst(terminal(Int_t, toString(i), top.givenLocation), location=top.givenLocation);
 }
 
 aspect production floatAST
 top::AST ::= f::Float
 {
   top.translation =
-    floatConst(terminal(Float_t, toString(f), builtin), location=builtin);
+    floatConst(terminal(Float_t, toString(f), top.givenLocation), location=top.givenLocation);
 }
 
 aspect production booleanAST
@@ -174,8 +201,8 @@ top::AST ::= b::Boolean
 {
   top.translation =
     if b
-    then trueConst('true', location=builtin)
-    else falseConst('false', location=builtin);
+    then trueConst('true', location=top.givenLocation)
+    else falseConst('false', location=top.givenLocation);
 }
 
 aspect production anyAST
@@ -188,7 +215,7 @@ top::AST ::= x::a
     end;
 }
 
-attribute translation<[Expr]> occurs on ASTs;
+attribute givenLocation, translation<[Expr]> occurs on ASTs;
 
 aspect production consAST
 top::ASTs ::= h::AST t::ASTs
@@ -202,49 +229,59 @@ top::ASTs ::=
   top.translation = [];
 }
 
-attribute translation<[AnnoExpr]> occurs on NamedASTs;
+attribute givenLocation, translation<[AnnoExpr]>, foundLocation occurs on NamedASTs;
 
 aspect production consNamedAST
 top::NamedASTs ::= h::NamedAST t::NamedASTs
 {
   top.translation = h.translation :: t.translation;
+  top.foundLocation = orElse(h.foundLocation, t.foundLocation);
 }
 
 aspect production nilNamedAST
 top::NamedASTs ::=
 {
   top.translation = [];
+  top.foundLocation = nothing();
 }
 
-attribute translation<AnnoExpr> occurs on NamedAST;
+attribute givenLocation, translation<AnnoExpr>, foundLocation occurs on NamedAST;
 
 aspect production namedAST
 top::NamedAST ::= n::String v::AST
 {
   top.translation =
     annoExpr(
-      qNameId(makeName(last(explode(":", n))), location=builtin), 
+      qNameId(makeName(last(explode(":", n)), top.givenLocation), location=top.givenLocation),
       '=',
-      presentAppExpr(v.translation, location=builtin),
-      location=builtin);
+      presentAppExpr(v.translation, location=top.givenLocation),
+      location=top.givenLocation);
+  top.foundLocation =
+    if n == "core:location"
+    then
+      case reify(v) of
+      | right(l) -> just(l)
+      | left(msg) -> error(s"Error in reifying location:\n${msg}")
+      end
+    else nothing();
 }
 
 function makeName
-Name ::= n::String
+Name ::= n::String loc::Location
 {
   return
     if isUpper(head(explode("", n)))
-    then nameIdUpper(terminal(IdUpper_t, n, builtin), location=builtin)
-    else nameIdLower(terminal(IdLower_t, n, builtin), location=builtin);
+    then nameIdUpper(terminal(IdUpper_t, n, loc), location=loc)
+    else nameIdLower(terminal(IdLower_t, n, loc), location=loc);
 }
 
 function makeQName
-QName ::= n::String
+QName ::= n::String loc::Location
 {
-  local ns::[Name] = map(makeName, explode(":", n));
+  local ns::[Name] = map(makeName(_, loc), explode(":", n));
   return
     foldr(
-      qNameCons(_, ':', _, location=builtin),
-      qNameId(last(ns), location=builtin),
+      qNameCons(_, ':', _, location=loc),
+      qNameId(last(ns), location=loc),
       init(ns));
 }

@@ -40,16 +40,22 @@ concrete productions top::PrimaryExpr_c
 | '$stringLiteralExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeStringLiteralExpr(e, location=top.location); }
 concrete productions top::Identifier_c
-| '$name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+| '$Name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeName(e, location=top.location); }
 concrete productions top::TypeIdName_c
-| '$tname' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+| '$TName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeTName(e, location=top.location); }
+concrete productions top::Identifier_c
+| '$name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escape_name(e, location=top.location); }
+concrete productions top::TypeIdName_c
+| '$tname' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escape_tname(e, location=top.location); }
 concrete productions top::ParameterDeclaration_c
 | '$Parameters' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   {
     top.declaredIdents = [];
-    top.ast = escapeParameters(e);
+    top.ast = escapeParameters(e, top.location);
   }
 concrete productions top::TypeName_c
 | '$TypeName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
@@ -63,7 +69,7 @@ concrete productions top::TypeSpecifier_c
 concrete productions top::TypeSpecifier_c
 | '$directTypeExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   {
-    top.realTypeSpecifiers = [escapeDirectTypeExpr(e)];
+    top.realTypeSpecifiers = [escapeDirectTypeExpr(e, top.location)];
     top.preTypeSpecifiers = [];
   }
 concrete productions top::Attrib_c

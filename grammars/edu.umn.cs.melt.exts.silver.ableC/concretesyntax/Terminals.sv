@@ -13,8 +13,10 @@ terminal EscapeExprs_t             '$Exprs'             lexer classes {Ckeyword}
 terminal EscapeExpr_t              '$Expr'              lexer classes {Ckeyword};
 terminal EscapeIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Ckeyword};
 terminal EscapeStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Ckeyword};
-terminal EscapeName_t              '$name'              lexer classes {Ckeyword};
-terminal EscapeTName_t             '$tname'             lexer classes {Ckeyword};
+terminal EscapeName_t              '$Name'              lexer classes {Ckeyword};
+terminal EscapeTName_t             '$TName'             lexer classes {Ckeyword};
+terminal Escape_name_t             '$name'              lexer classes {Ckeyword};
+terminal Escape_tname_t            '$tname'             lexer classes {Ckeyword};
 terminal EscapeParameters_t        '$Parameters'        lexer classes {Ckeyword};
 terminal EscapeTypeName_t          '$TypeName'          lexer classes {Ckeyword};
 terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Ckeyword};

@@ -14,28 +14,28 @@ abstract production ableCDeclsLiteral
 top::Expr ::= ast::ableC:Decls
 {
   top.pp = s"ableC Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
-  forwards to reflect(new(ast)).translation;
+  forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production ableCDeclLiteral
 top::Expr ::= ast::ableC:Decl
 {
   top.pp = s"ableC Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to reflect(new(ast)).translation;
+  forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production ableCStmtLiteral
 top::Expr ::= ast::ableC:Stmt
 {
   top.pp = s"ableC Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to reflect(new(ast)).translation;
+  forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production ableCExprLiteral
 top::Expr ::= ast::ableC:Expr
 {
   top.pp = s"ableC Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to reflect(new(ast)).translation;
+  forwards to translate(top.location, reflect(new(ast)));
 }
 
 -- AbleC-to-Silver bridge productions
@@ -84,19 +84,33 @@ top::ableC:Expr ::= e::Expr
 abstract production escapeName
 top::ableC:Name ::= e::Expr
 {
-  top.pp = pp"$$name{${text(e.pp)}}";
+  top.pp = pp"$$Name{${text(e.pp)}}";
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
 abstract production escapeTName
 top::ableC:Name ::= e::Expr
 {
+  top.pp = pp"$$TName{${text(e.pp)}}";
+  forwards to ableC:name("<unknown type name>", location=builtin);
+}
+
+abstract production escape_name
+top::ableC:Name ::= e::Expr
+{
+  top.pp = pp"$$name{${text(e.pp)}}";
+  forwards to ableC:name("<unknown>", location=builtin);
+}
+
+abstract production escape_tname
+top::ableC:Name ::= e::Expr
+{
   top.pp = pp"$$tname{${text(e.pp)}}";
-  forwards to escapeName(e, location=top.location);
+  forwards to ableC:name("<unknown type name>", location=builtin);
 }
 
 abstract production escapeParameters
-top::ableC:ParameterDecl ::= e::Expr
+top::ableC:ParameterDecl ::= e::Expr loc::Location
 {
   top.pp = pp"$$Parameters{${text(e.pp)}}";
   forwards to error("TODO: forward value for escapeParameters");
@@ -117,7 +131,7 @@ top::ableC:BaseTypeExpr ::= e::Expr
 }
 
 abstract production escapeDirectTypeExpr
-top::ableC:BaseTypeExpr ::= e::Expr
+top::ableC:BaseTypeExpr ::= e::Expr loc::Location
 {
   top.pp = pp"$$directTypeExpr{${text(e.pp)}}";
   forwards to ableC:errorTypeExpr([]);
