@@ -63,13 +63,14 @@ concrete productions top::TypeName_c
 concrete productions top::TypeSpecifier_c
 | '$BaseTypeExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   {
+    -- TODO: Discarding qualifiers here!
     top.realTypeSpecifiers = [escapeBaseTypeExpr(e)];
     top.preTypeSpecifiers = [];
   }
 concrete productions top::TypeSpecifier_c
 | '$directTypeExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   {
-    top.realTypeSpecifiers = [escapeDirectTypeExpr(e, top.location)];
+    top.realTypeSpecifiers = [escapeDirectTypeExpr(top.givenQualifiers, e, top.location)];
     top.preTypeSpecifiers = [];
   }
 concrete productions top::Attrib_c

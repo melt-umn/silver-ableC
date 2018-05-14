@@ -96,11 +96,20 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr", _, _ ->
         error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr",
-      consAST(a, consAST(locAST, nilAST())), nilNamedAST() ->
+      consAST(qualifiersAST, consAST(a, consAST(locAST, nilAST()))), nilNamedAST() ->
         case reify(a) of
         | right(e) ->
             mkStrFunctionInvocation(
-              givenLocation, "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr", [e])
+              givenLocation, "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
+              [mkStrFunctionInvocation(
+                 givenLocation,
+                 "edu:umn:cs:melt:ableC:abstractsyntax:host:addQualifiers",
+                 [access(
+                    qualifiersAST.translation, '.',
+                    qNameAttrOccur(
+                      makeQName("qualifiers", givenLocation), location=givenLocation),
+                    location=givenLocation),
+                  e])])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr", _, _ ->

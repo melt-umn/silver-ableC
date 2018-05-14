@@ -131,7 +131,7 @@ top::ableC:BaseTypeExpr ::= e::Expr
 }
 
 abstract production escapeDirectTypeExpr
-top::ableC:BaseTypeExpr ::= e::Expr loc::Location
+top::ableC:BaseTypeExpr ::= givenQualifiers::ableC:Qualifiers e::Expr loc::Location
 {
   top.pp = pp"$$directTypeExpr{${text(e.pp)}}";
   forwards to ableC:errorTypeExpr([]);
