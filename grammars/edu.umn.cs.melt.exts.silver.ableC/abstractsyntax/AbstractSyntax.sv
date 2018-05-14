@@ -67,18 +67,32 @@ top::ableC:Expr ::= e::Expr
   forwards to ableC:errorExpr([], location=builtin);
 }
 
+abstract production escapeIntLiteralExpr
+top::ableC:Expr ::= e::Expr
+{
+  top.pp = pp"$$intLiteralExpr{${text(e.pp)}}";
+  forwards to ableC:errorExpr([], location=builtin);
+}
+
+abstract production escapeStringLiteralExpr
+top::ableC:Expr ::= e::Expr
+{
+  top.pp = pp"$$stringLiteralExpr{${text(e.pp)}}";
+  forwards to ableC:errorExpr([], location=builtin);
+}
+
 abstract production escapeName
 top::ableC:Name ::= e::Expr
 {
-  top.pp = pp"$$Name{${text(e.pp)}}";
+  top.pp = pp"$$name{${text(e.pp)}}";
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
-abstract production escapeTypedefName
+abstract production escapeTName
 top::ableC:Name ::= e::Expr
 {
-  top.pp = pp"$$TypedefName{${text(e.pp)}}";
-  forwards to ableC:name("<unknown type name>", location=builtin);
+  top.pp = pp"$$tname{${text(e.pp)}}";
+  forwards to escapeName(e, location=top.location);
 }
 
 abstract production escapeParameters
@@ -102,10 +116,10 @@ top::ableC:BaseTypeExpr ::= e::Expr
   forwards to ableC:errorTypeExpr([]);
 }
 
-abstract production escapeType
+abstract production escapeDirectTypeExpr
 top::ableC:BaseTypeExpr ::= e::Expr
 {
-  top.pp = pp"$$Type{${text(e.pp)}}";
+  top.pp = pp"$$directTypeExpr{${text(e.pp)}}";
   forwards to ableC:errorTypeExpr([]);
 }
 
