@@ -40,7 +40,7 @@ parser svParse::Root {
   edu:umn:cs:melt:exts:silver:ableC;
   
   edu:umn:cs:melt:exts:ableC:closure;
-  edu:umn:cs:melt:exts:ableC:refCountClosure prefix with 'refcount' lexer classes {Ckeyword};
+  edu:umn:cs:melt:exts:ableC:refCountClosure prefix with "refcount";
   prefer edu:umn:cs:melt:exts:ableC:closure:concretesyntax:typeExpr:Closure_t
     over edu:umn:cs:melt:exts:ableC:refCountClosure:concretesyntax:typeExpr:Closure_t;
   prefer edu:umn:cs:melt:exts:ableC:closure:concretesyntax:lambdaExpr:Lambda_t
