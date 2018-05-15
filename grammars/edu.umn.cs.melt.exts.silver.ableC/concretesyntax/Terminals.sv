@@ -7,21 +7,24 @@ marking terminal AbleCDecl_t  'ableC_Decl'  lexer classes {KEYWORD, RESERVED};
 marking terminal AbleCStmt_t  'ableC_Stmt'  lexer classes {KEYWORD, RESERVED};
 marking terminal AbleCExpr_t  'ableC_Expr'  lexer classes {KEYWORD, RESERVED};
 
-terminal EscapeStmt_t              '$Stmt'              lexer classes {Ckeyword};
-terminal EscapeInitializer_t       '$Initializer'       lexer classes {Ckeyword};
-terminal EscapeExprs_t             '$Exprs'             lexer classes {Ckeyword};
-terminal EscapeExpr_t              '$Expr'              lexer classes {Ckeyword};
-terminal EscapeIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Ckeyword};
-terminal EscapeStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Ckeyword};
-terminal EscapeName_t              '$Name'              lexer classes {Ckeyword};
-terminal EscapeTName_t             '$TName'             lexer classes {Ckeyword};
-terminal Escape_name_t             '$name'              lexer classes {Ckeyword};
-terminal Escape_tname_t            '$tname'             lexer classes {Ckeyword};
-terminal EscapeParameters_t        '$Parameters'        lexer classes {Ckeyword};
-terminal EscapeTypeName_t          '$TypeName'          lexer classes {Ckeyword};
-terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Ckeyword};
-terminal EscapeType_t              '$directTypeExpr'    lexer classes {Ckeyword};
-terminal EscapeAttrib_t            '$Attrib'            lexer classes {Ckeyword}, dominates {AttributeNameUnfetterdByKeywords_t};
+temp_imp_ide_font font_escape color(160, 32, 240) bold italic;
+lexer class Escape font=font_escape;
+
+terminal EscapeStmt_t              '$Stmt'              lexer classes {Escape, Ckeyword};
+terminal EscapeInitializer_t       '$Initializer'       lexer classes {Escape, Ckeyword};
+terminal EscapeExprs_t             '$Exprs'             lexer classes {Escape, Ckeyword};
+terminal EscapeExpr_t              '$Expr'              lexer classes {Escape, Ckeyword};
+terminal EscapeIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Escape, Ckeyword};
+terminal EscapeStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Escape, Ckeyword};
+terminal EscapeName_t              '$Name'              lexer classes {Escape, Ckeyword};
+terminal EscapeTName_t             '$TName'             lexer classes {Escape, Ckeyword};
+terminal Escape_name_t             '$name'              lexer classes {Escape, Ckeyword};
+terminal Escape_tname_t            '$tname'             lexer classes {Escape, Ckeyword};
+terminal EscapeParameters_t        '$Parameters'        lexer classes {Escape, Ckeyword};
+terminal EscapeTypeName_t          '$TypeName'          lexer classes {Escape, Ckeyword};
+terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Escape, Ckeyword};
+terminal EscapeType_t              '$directTypeExpr'    lexer classes {Escape, Ckeyword};
+terminal EscapeAttrib_t            '$Attrib'            lexer classes {Escape, Ckeyword}, dominates {AttributeNameUnfetterdByKeywords_t};
 
 -- Workarounds for weirdness with ignore terminals
 parser attribute inAbleC::Boolean action { inAbleC = false; };
@@ -32,21 +35,19 @@ disambiguate NewLine_t, RegexChar_t, WhiteSpace
 {
   pluck if inAbleC then NewLine_t else WhiteSpace;
 }
+disambiguate NewLine_t, WhiteSpace
+{
+  pluck if inAbleC then NewLine_t else WhiteSpace;
+}
 disambiguate Spaces_t, RegexChar_t, WhiteSpace
+{
+  pluck if inAbleC then Spaces_t else WhiteSpace;
+}
+disambiguate Spaces_t, WhiteSpace
 {
   pluck if inAbleC then Spaces_t else WhiteSpace;
 }
 disambiguate DEC_OP, Comments
 {
   pluck if inAbleC then DEC_OP else Comments;
-}
-
--- TODO: Needed because of copper bug?
-disambiguate NewLine_t, WhiteSpace
-{
-  pluck if inAbleC then NewLine_t else WhiteSpace;
-}
-disambiguate Spaces_t, WhiteSpace
-{
-  pluck if inAbleC then Spaces_t else WhiteSpace;
 }
