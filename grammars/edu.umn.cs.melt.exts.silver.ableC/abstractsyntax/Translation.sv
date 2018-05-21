@@ -173,13 +173,38 @@ aspect production listAST
 top::AST ::= vals::ASTs
 {
   top.translation =
-    fullList(
-      '[',
-      foldr(
-        exprsCons(_, ',', _, location=top.givenLocation),
-        exprsEmpty(location=top.givenLocation),
-        vals.translation),
-      ']', location=top.givenLocation);
+    case vals of
+    -- TODO: Workaround since we don't have a StorageClasses nonterminal yet
+    | consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        nilAST()) ->
+        case reify(a) of
+        | right(e) -> e
+        | left(msg) -> error(s"Error in reifying child of production edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses:\n${msg}")
+        end
+    | consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        _) -> errorExpr([err(vals.givenLocation, "$EscapeStorageClasses must be the only given storage class")], location=top.givenLocation)
+    | consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses", _, _),
+        _) ->
+        error(s"Unexpected escape production: ${show(80, top.pp)}")
+    | _ -> 
+      fullList(
+        '[',
+        foldr(
+          exprsCons(_, ',', _, location=top.givenLocation),
+          exprsEmpty(location=top.givenLocation),
+          vals.translation),
+        ']', location=top.givenLocation)
+    end;
 }
 
 aspect production stringAST

@@ -116,6 +116,13 @@ top::ableC:Name ::= e::Expr
   forwards to ableC:name("<unknown type name>", location=builtin);
 }
 
+abstract production escapeStorageClasses
+top::ableC:StorageClass ::= e::Expr loc::Location
+{
+  top.pp = pp"$$Parameters{${text(e.pp)}}";
+  forwards to error("TODO: forward value for escapeStorageClasses");
+}
+
 abstract production escapeParameters
 top::ableC:ParameterDecl ::= e::Expr loc::Location
 {

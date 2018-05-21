@@ -57,6 +57,12 @@ concrete productions top::Identifier_c
 concrete productions top::TypeIdName_c
 | '$tname' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escape_tname(e, location=top.location); }
+concrete productions top::StorageClassSpecifier_c
+| '$StorageClasses' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  {
+    top.isTypedef = false;
+    top.storageClass = [escapeStorageClasses(e, top.location)];
+  }
 concrete productions top::ParameterDeclaration_c
 | '$Parameters' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   {
