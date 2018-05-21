@@ -13,28 +13,35 @@ imports edu:umn:cs:melt:ableC:abstractsyntax:host as ableC;
 abstract production ableCDeclsLiteral
 top::Expr ::= ast::ableC:Decls
 {
-  top.pp = s"ableC Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
+  top.pp = s"ableC_Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production ableCDeclLiteral
 top::Expr ::= ast::ableC:Decl
 {
-  top.pp = s"ableC Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.pp = s"ableC_Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translate(top.location, reflect(new(ast)));
+}
+
+abstract production ableCParametersLiteral
+top::Expr ::= ast::ableC:Parameters
+{
+  top.pp = s"ableC_Parameters {${sconcat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production ableCStmtLiteral
 top::Expr ::= ast::ableC:Stmt
 {
-  top.pp = s"ableC Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.pp = s"ableC_Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production ableCExprLiteral
 top::Expr ::= ast::ableC:Expr
 {
-  top.pp = s"ableC Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.pp = s"ableC_Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
