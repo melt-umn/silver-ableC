@@ -13,12 +13,21 @@ synthesized attribute translation<a>::a;
 synthesized attribute foundLocation::Maybe<Location>;
 autocopy attribute givenLocation::Location;
 
-attribute givenLocation, translation<Expr> occurs on AST;
+synthesized attribute escapeStorageClassesErrors::[silver:definition:core:Message];
+
+attribute givenLocation, translation<Expr>, escapeStorageClassesErrors occurs on AST;
+
+aspect default production
+top::AST ::=
+{
+  top.escapeStorageClassesErrors = [];
+}
 
 aspect production nonterminalAST
 top::AST ::= prodName::String children::ASTs annotations::NamedASTs
 {
-  local givenLocation::Location = fromMaybe(top.givenLocation, annotations.foundLocation);
+  production givenLocation::Location =
+    fromMaybe(top.givenLocation, orElse(children.foundLocation, annotations.foundLocation));
   top.translation =
     -- "Direct" escape productions
     if
@@ -164,6 +173,10 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
             reverse(annotations.translation)),
           ')', location=givenLocation)
     end;
+    top.escapeStorageClassesErrors =
+      if prodName == "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses"
+      then [err(givenLocation, "$EscapeStorageClasses must be the only given storage class")]
+      else [];
     
     children.givenLocation = givenLocation;
     annotations.givenLocation = givenLocation;
@@ -187,23 +200,20 @@ top::AST ::= vals::ASTs
         end
     | consAST(
         nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
-          consAST(a, consAST(locAST, nilAST())),
-          nilNamedAST()),
-        _) -> errorExpr([err(vals.givenLocation, "$EscapeStorageClasses must be the only given storage class")], location=top.givenLocation)
-    | consAST(
-        nonterminalAST(
           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses", _, _),
-        _) ->
+        nilAST()) ->
         error(s"Unexpected escape production: ${show(80, top.pp)}")
     | _ -> 
-      fullList(
-        '[',
-        foldr(
-          exprsCons(_, ',', _, location=top.givenLocation),
-          exprsEmpty(location=top.givenLocation),
-          vals.translation),
-        ']', location=top.givenLocation)
+      if !null(vals.escapeStorageClassesErrors)
+      then errorExpr(vals.escapeStorageClassesErrors, location=top.givenLocation)
+      else
+        fullList(
+          '[',
+          foldr(
+            exprsCons(_, ',', _, location=top.givenLocation),
+            exprsEmpty(location=top.givenLocation),
+            vals.translation),
+          ']', location=top.givenLocation)
     end;
 }
 
@@ -249,18 +259,31 @@ top::AST ::= x::a
     end;
 }
 
-attribute givenLocation, translation<[Expr]> occurs on ASTs;
+attribute givenLocation, translation<[Expr]>, foundLocation, escapeStorageClassesErrors occurs on ASTs;
 
 aspect production consAST
 top::ASTs ::= h::AST t::ASTs
 {
   top.translation = h.translation :: t.translation;
+  top.foundLocation =
+    -- Try to reify the last child as a location
+    case t of
+    | nilAST() ->
+        case reify(h) of
+        | right(l) -> just(l)
+        | left(_) -> nothing()
+        end
+    | _ -> t.foundLocation
+    end;
+  top.escapeStorageClassesErrors = h.escapeStorageClassesErrors ++ t.escapeStorageClassesErrors; 
 }
 
 aspect production nilAST
 top::ASTs ::=
 {
   top.translation = [];
+  top.foundLocation = nothing();
+  top.escapeStorageClassesErrors = [];
 }
 
 attribute givenLocation, translation<[AnnoExpr]>, foundLocation occurs on NamedASTs;
