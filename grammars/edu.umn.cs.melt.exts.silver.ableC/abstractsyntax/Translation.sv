@@ -34,6 +34,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       containsBy(
         stringEq, prodName,
         ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStmt",
+         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecl",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeInitializer",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExpr",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName",
@@ -124,6 +125,24 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr", _, _ ->
         error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
     -- "Collection" escape productions
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consDecl",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls",
+          consAST(a, nilAST()),
+          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendDecls",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls", _, _ ->
+        error(s"Unexpected escape production: ${show(80, top.pp)}")
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
       consAST(
         nonterminalAST(

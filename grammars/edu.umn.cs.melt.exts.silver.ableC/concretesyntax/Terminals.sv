@@ -11,6 +11,8 @@ marking terminal AbleCExpr_t       'ableC_Expr'       lexer classes {KEYWORD, RE
 temp_imp_ide_font font_escape color(160, 32, 240) bold italic;
 lexer class Escape font=font_escape;
 
+terminal EscapeDecls_t             '$Decls'             lexer classes {Escape, Ckeyword};
+terminal EscapeDecl_t              '$Decl'              lexer classes {Escape, Ckeyword};
 terminal EscapeStmt_t              '$Stmt'              lexer classes {Escape, Ckeyword};
 terminal EscapeInitializer_t       '$Initializer'       lexer classes {Escape, Ckeyword};
 terminal EscapeExprs_t             '$Exprs'             lexer classes {Escape, Ckeyword};

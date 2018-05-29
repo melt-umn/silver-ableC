@@ -27,6 +27,12 @@ concrete productions top::Expr
   { forwards to ableCExprLiteral(cst.ast, location=top.location); }
 
 -- AbleC-to-Silver bridge productions
+concrete productions top::Declaration_c
+| '$Decls' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeDecls(e); }
+concrete productions top::Declaration_c
+| '$Decl' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeDecl(e); }
 concrete productions top::BlockItem_c
 | '$Stmt' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = [escapeStmt(e)]; }

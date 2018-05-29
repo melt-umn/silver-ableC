@@ -46,6 +46,20 @@ top::Expr ::= ast::ableC:Expr
 }
 
 -- AbleC-to-Silver bridge productions
+abstract production escapeDecls
+top::ableC:Decl ::= e::Expr
+{
+  top.pp = pp"$$Decls{${text(e.pp)}}";
+  forwards to ableC:warnDecl([]);
+}
+
+abstract production escapeDecl
+top::ableC:Decl ::= e::Expr
+{
+  top.pp = pp"$$Decl{${text(e.pp)}}";
+  forwards to ableC:warnDecl([]);
+}
+
 abstract production escapeStmt
 top::ableC:Stmt ::= e::Expr
 {
