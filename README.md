@@ -45,4 +45,18 @@ Idiom                                                                           
 `$TName{name(n, location=...)}`                                                                       | `$tname{n}`
 `$BaseTypeExpr{directTypeExpr(t)}`                                                                    | `directTypeExpr{t}`
 
+## Typedef prototypes
+Due to the ambiguous nature of the C grammar and the infamous "lexer hack", knowledge of whether an identifier has previously been defined as a value or a typedef is often required during parsing.  As fragments of code involved in definitions may reference types defined in header files, some method of informing the lexer of all externally defined typedefs is needed.  To do this, the syntax `proto_typedef foo, bar, baz;` may be used at the start of any ableC block.  This has no semantic meaning, and only has an effect on how identifiers are parsed.  
+
+## Additional extensions
+When building an extension on other ableC extensions, it is useful to use their syntax in a similar way when constructing ASTs.  This can be done simply by including ableC extensions in the parser along side silver and silver-ableC.  The default composed version of Silver built by this repository contains several commonly useful extensions: ableC-closure, ableC-refcount-closure (transparent prefix `refcount`), and ableC-templating.  However, it is possible to write a custom artifact for Silver to build silver-ableC with a different set of extensions.  
+
 ## More information
+More documentation:
+* [Getting started with using the extension](GETTING_STARTED.md)
+* [How it works](IMPLEMENTATION.md)
+
+ableC extensions using this extension:
+* [ableC-closure](https://github.com/melt-umn/ableC-closure)
+* [ableC-vector](https://github.com/melt-umn/ableC-vector)
+* [ableC-nondeterministic-search](https://github.com/melt-umn/ableC-nondeterministic-search)
