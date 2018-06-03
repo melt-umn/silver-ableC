@@ -37,6 +37,8 @@ ableC_Decl {
 
 A number of common escape idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
 
+Idiom                                                                                                 | Shorthand
+----------------------------------------------------------------------------------------------------- | --------------------
 `$Expr{realConstant(integerConstant(toString(i), false, noIntSuffix(), location=...), location=...)}` | `$intLiteralExpr{i}`
 `$Expr{stringLiteral("\"" ++ escapeString(s) ++ "\"", location=...)}`                                 | `$stringLiteralExpr{s}`
 `$Name{name(n, location=...)}`                                                                        | `$name{n}`
