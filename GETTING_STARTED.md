@@ -6,10 +6,10 @@ This extension depends on Silver and ableC, and so both of these repos must be c
     |-- silver/
     |-- ableC/
     |-- extensions/
-        | ableC-closure/
-        | ableC-refcount-closure/
-        | ableC-templating/
-        | silver-ableC/
+        |-- ableC-closure/
+        |-- ableC-refcount-closure/
+        |-- ableC-templating/
+        |-- silver-ableC/
 
 First ensure that Silver is installed correctly and up to date by running `./update && ./self-compile` in the `silver/` repository, and ensure that the `silver` and `silver-custom` scripts have been installed by running `./support/bin/install-silver-bin`.  
 

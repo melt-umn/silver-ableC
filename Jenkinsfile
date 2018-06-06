@@ -7,6 +7,16 @@ melt.setProperties(silverBase: true, ablecBase: true)
 melt.trynode('silver-ableC') {
   def SILVER_ABLEC_BASE = env.WORKSPACE
   def newenv = melt.getSilverEnv()
+  
+  // Build dependancies of ableC-silver
+  def extensions = [
+    "ableC-closure",
+    "ableC-refcount-closure",
+    "ableC-templating"
+  ]
+  for (ext in extensions) {
+    checkoutExtension(ext)
+  }
 
   stage ("Build") {
 

@@ -1,6 +1,9 @@
+
 #!/bin/bash
+
+ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
 
 mkdir -p build
 cd build
 
-silver -I ../grammars -I ../../../ableC/grammars $@ edu:umn:cs:melt:exts:silver:ableC:mda_test
+silver -I ../grammars -I $ABLEC_BASE/grammars $@ edu:umn:cs:melt:exts:silver:ableC:mda_test
