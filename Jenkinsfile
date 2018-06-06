@@ -6,7 +6,7 @@ melt.setProperties(silverBase: true, ablecBase: true)
 
 melt.trynode('silver-ableC') {
   def SILVER_ABLEC_BASE = env.WORKSPACE
-  def ABLEC_BASE = ableC.resolveHost()
+  def ABLEC_BASE = ablec.resolveHost()
   def newenv = melt.getSilverEnv() + [
     "ABLEC_BASE=${ablec_base}",
     "EXTS_BASE=${env.WORKSPACE}/extensions"
