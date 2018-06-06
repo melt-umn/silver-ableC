@@ -19,7 +19,7 @@ melt.trynode('silver-ableC') {
     "ableC-templating"
   ]
   for (ext in ext_dependencies) {
-    melt.checkoutExtension(ext)
+    ablec.checkoutExtension(ext)
   }
   
   stage ("Build") {
