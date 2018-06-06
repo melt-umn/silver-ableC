@@ -9,15 +9,15 @@ melt.trynode('silver-ableC') {
   def newenv = melt.getSilverEnv()
   
   // Build dependancies of ableC-silver
-  def extensions = [
+  def ext_dependencies = [
     "ableC-closure",
     "ableC-refcount-closure",
     "ableC-templating"
   ]
-  for (ext in extensions) {
+  for (ext in ext_dependencies) {
     checkoutExtension(ext)
   }
-
+  
   stage ("Build") {
 
     checkout scm
