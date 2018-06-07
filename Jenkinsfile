@@ -31,6 +31,9 @@ melt.trynode('silver-ableC') {
     withEnv(newenv) {
       sh './bootstrap-compile'
     }
+    
+    // Upon succeeding at initial build, archive for future builds
+    archiveArtifacts(artifacts: "jars/*.jar", fingerprint: true)
   }
 
   stage ("Modular Analyses") {
