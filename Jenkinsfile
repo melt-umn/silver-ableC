@@ -12,17 +12,19 @@ melt.trynode('silver-ableC') {
     "EXTS_BASE=${env.WORKSPACE}/extensions"
   ]
   
-  // Build dependancies of ableC-silver
-  def ext_dependencies = [
-    "ableC-closure",
-    "ableC-refcount-closure",
-    "ableC-templating"
-  ]
-  for (ext in ext_dependencies) {
-    ablec.checkoutExtension(ext)
-  }
-  
   stage ("Build") {
+
+    checkout scm
+  
+    // Get dependancies of ableC-silver
+    def ext_dependencies = [
+      "ableC-closure",
+      "ableC-refcount-closure",
+      "ableC-templating"
+    ]
+    for (ext in ext_dependencies) {
+      ablec.checkoutExtension(ext)
+    }
     
     melt.clearGenerated()
 
