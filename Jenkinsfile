@@ -45,7 +45,6 @@ melt.trynode('silver-ableC') {
     def extensions = [
       "ableC-closure",
       "ableC-refcount-closure",
-      "ableC-templating",
       "ableC-vector",
       "ableC-nondeterministic-search", "ableC-nondeterministic-search-benchmarks"
     ]
