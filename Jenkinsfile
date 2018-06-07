@@ -49,7 +49,8 @@ melt.trynode('silver-ableC') {
       "ableC-closure",
       "ableC-refcount-closure",
       "ableC-vector",
-      "ableC-nondeterministic-search", "ableC-nondeterministic-search-benchmarks"
+      "ableC-nondeterministic-search", "ableC-nondeterministic-search-benchmarks",
+      "ableC-sample-projects",
     ]
 
     def tasks = [:]
