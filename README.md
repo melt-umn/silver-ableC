@@ -43,7 +43,7 @@ Idiom                                                                           
 `$Expr{stringLiteral("\"" ++ escapeString(s) ++ "\"", location=...)}`                                 | `$stringLiteralExpr{s}`
 `$Name{name(n, location=...)}`                                                                        | `$name{n}`
 `$TName{name(n, location=...)}`                                                                       | `$tname{n}`
-`$BaseTypeExpr{directTypeExpr(t)}`                                                                    | `directTypeExpr{t}`
+`$BaseTypeExpr{directTypeExpr(t)}`                                                                    | `$directTypeExpr{t}`
 
 ## Typedef Prototypes
 Due to the ambiguous nature of the C grammar and the infamous "lexer hack", knowledge of whether an identifier has previously been defined as a value or a typedef is often required during parsing.  As fragments of code involved in definitions may reference types defined in header files, some method of informing the lexer of all externally defined typedefs is needed.  To do this, the syntax `proto_typedef foo, bar, baz;` may be used at the start of any ableC block.  This has no semantic meaning, and only has an effect on how identifiers are parsed.  
