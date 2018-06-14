@@ -30,7 +30,6 @@ concrete productions top::Expr
 concrete productions top::Declaration_c
 | '$Decls' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeDecls(e); }
-concrete productions top::Declaration_c
 | '$Decl' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeDecl(e); }
 concrete productions top::BlockItem_c
@@ -42,25 +41,20 @@ concrete productions top::Initializer_c
 concrete productions top::PrimaryExpr_c
 | '$Exprs' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeExprs(e, location=top.location); }
-concrete productions top::PrimaryExpr_c
 | '$Expr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeExpr(e, location=top.location); }
-concrete productions top::PrimaryExpr_c
 | '$intLiteralExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeIntLiteralExpr(e, location=top.location); }
-concrete productions top::PrimaryExpr_c
 | '$stringLiteralExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeStringLiteralExpr(e, location=top.location); }
 concrete productions top::Identifier_c
 | '$Name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeName(e, location=top.location); }
-concrete productions top::TypeIdName_c
-| '$TName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
-  { top.ast = escapeTName(e, location=top.location); }
-concrete productions top::Identifier_c
 | '$name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escape_name(e, location=top.location); }
 concrete productions top::TypeIdName_c
+| '$TName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeTName(e, location=top.location); }
 | '$tname' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escape_tname(e, location=top.location); }
 concrete productions top::StorageClassSpecifier_c
