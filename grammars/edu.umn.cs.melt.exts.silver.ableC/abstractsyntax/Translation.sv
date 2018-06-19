@@ -142,7 +142,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls", _, _ ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
+        errorExpr([err(givenLocation, "$Decls may only occur as a member of Decls")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
       consAST(
         nonterminalAST(
@@ -160,7 +160,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", _, _ ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
+        errorExpr([err(givenLocation, "$Exprs may only occur as a member of Exprs")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
       consAST(
         nonterminalAST(
@@ -178,7 +178,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters", _, _ ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
+        errorExpr([err(givenLocation, "$Parameters may only occur as a member of Parameters")], location=givenLocation)
     -- Default
     | _, _, _ ->
         application(
