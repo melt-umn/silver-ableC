@@ -6,7 +6,6 @@ grammar edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all;
 imports silver:composed:idetest;
 
 import silver:host;
-import silver:host:env;
 import silver:translation:java;
 import silver:driver;
 

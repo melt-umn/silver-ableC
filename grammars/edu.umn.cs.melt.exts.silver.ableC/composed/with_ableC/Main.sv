@@ -1,7 +1,6 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_ableC;
 
 import silver:host;
-import silver:host:env;
 import silver:translation:java;
 import silver:driver;
 
