@@ -18,13 +18,13 @@ import silver:analysis:warnings:exporting;
 import ide;
 
 -- Just re-use these parser declarations, instead of duplicating them here.
-import edu:umn:cs:melt:exts:silver:ableC:composed:with_all only svParse, sviParse;
+import edu:umn:cs:melt:exts:silver:ableC:composed:with_all only svParse;
 
 -- This function is not used by IDE
 function main 
 IOVal<Integer> ::= args::[String] ioin::IO
 {
-  return cmdLineRun(args, svParse, sviParse, ioin);
+  return cmdLineRun(args, svParse, ioin);
 }
 
 -- IDE declaration block
@@ -54,7 +54,7 @@ IOVal<[IdeMessage]> ::= project::IdeProject  args::[IdeProperty]  i::IO
 {
   local argio :: IOVal<[String]> = getArgStrings(args, project, i);
 
-  local ru :: IOVal<[IdeMessage]> = ideAnalyze(argio.iovalue, svParse, sviParse, argio.io);
+  local ru :: IOVal<[IdeMessage]> = ideAnalyze(argio.iovalue, svParse, argio.io);
 
   return ru;
 }
@@ -64,7 +64,7 @@ IOVal<[IdeMessage]> ::= project::IdeProject  args::[IdeProperty]  i::IO
 {
   local argio :: IOVal<[String]> = getArgStrings(args, project, i);
 
-  local ru :: IOVal<[IdeMessage]> = ideGenerate(argio.iovalue, svParse, sviParse, argio.io);
+  local ru :: IOVal<[IdeMessage]> = ideGenerate(argio.iovalue, svParse, argio.io);
 
   return ru;
 
