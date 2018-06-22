@@ -201,6 +201,28 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     annotations.givenLocation = givenLocation;
 }
 
+aspect production terminalAST
+top::AST ::= terminalName::String lexeme::String location::Location
+{
+  local locationAST::AST = reflect(new(location));
+  locationAST.givenLocation = top.givenLocation;
+
+  top.translation =
+    terminalConstructor(
+      'terminal', '(',
+      nominalTypeExpr(
+        makeQNameType(terminalName, top.givenLocation), botlNone(location=top.givenLocation),
+        location=top.givenLocation),
+      ',',
+      stringConst(
+        terminal(String_t, s"\"${escapeString(lexeme)}\"", top.givenLocation),
+        location=top.givenLocation),
+      ',',
+      locationAST.translation,
+      ')', location=top.givenLocation);
+  top.escapeStorageClassesErrors = [];
+}
+
 aspect production listAST
 top::AST ::= vals::ASTs
 {
@@ -360,4 +382,15 @@ QName ::= n::String loc::Location
       qNameCons(_, ':', _, location=loc),
       qNameId(last(ns), location=loc),
       init(ns));
+}
+
+function makeQNameType
+QNameType ::= n::String loc::Location
+{
+  local ns::[String] = explode(":", n);
+  return
+    foldr(
+      qNameTypeCons(_, ':', _, location=loc),
+      qNameTypeId(terminal(IdUpper_t, last(ns), loc), location=loc),
+      map(makeName(_, loc), init(ns)));
 }

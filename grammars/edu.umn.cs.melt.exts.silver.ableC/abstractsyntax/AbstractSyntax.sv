@@ -5,6 +5,7 @@ imports silver:langutil:pp;
 
 imports silver:definition:core;
 imports silver:definition:env;
+imports silver:definition:type:syntax;
 imports silver:extension:list;
 
 imports edu:umn:cs:melt:ableC:abstractsyntax:host as ableC;
