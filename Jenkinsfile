@@ -6,8 +6,10 @@ melt.setProperties(silverBase: true, ablecBase: true)
 
 melt.trynode('silver-ableC') {
   def SILVER_ABLEC_BASE = env.WORKSPACE
-  def ABLEC_BASE = ablec.resolveHost()
-  def newenv = melt.getSilverEnv() + [
+  def ABLEC_BASE = ablec.resolveAbleC()
+  def ABLEC_GEN = "${SILVER_ABLEC_BASE}/generated"
+  def SILVER_BASE = silver.resolveSilver()
+  def newenv = silver.getSilverEnv(SILVER_BASE) + [
     "ABLEC_BASE=${ABLEC_BASE}",
     "EXTS_BASE=${env.WORKSPACE}/extensions"
   ]
@@ -54,7 +56,10 @@ melt.trynode('silver-ableC') {
     ]
 
     def tasks = [:]
-    def newargs = [SILVER_ABLEC_BASE: SILVER_ABLEC_BASE] // SILVER_BASE, ABLEC_BASE, ABLEC_GEN inherited
+    def newargs = [SILVER_BASE: SILVER_BASE,
+                   ABLEC_BASE: ABLEC_BASE,
+                   ABLEC_GEN: ABLEC_GEN,
+                   SILVER_ABLEC_BASE: SILVER_ABLEC_BASE]
     tasks << extensions.collectEntries { t ->
       [(t): { melt.buildProject("/melt-umn/${t}", newargs) }]
     }
