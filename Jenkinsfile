@@ -5,6 +5,8 @@ library "github.com/melt-umn/jenkins-lib"
 melt.setProperties(silverBase: true, ablecBase: true)
 
 melt.trynode('silver-ableC') {
+  melt.clearGenerated()
+  
   def SILVER_ABLEC_BASE = env.WORKSPACE
   def ABLEC_BASE = ablec.resolveAbleC()
   def ABLEC_GEN = "${SILVER_ABLEC_BASE}/generated"
@@ -27,8 +29,6 @@ melt.trynode('silver-ableC') {
     for (ext in ext_dependencies) {
       ablec.checkoutExtension(ext)
     }
-    
-    melt.clearGenerated()
 
     withEnv(newenv) {
       sh './bootstrap-compile'
