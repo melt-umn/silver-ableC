@@ -13,7 +13,7 @@ synthesized attribute translation<a>::a;
 synthesized attribute foundLocation::Maybe<Location>;
 autocopy attribute givenLocation::Location;
 
-synthesized attribute escapeStorageClassesErrors::[silver:definition:core:Message];
+synthesized attribute escapeStorageClassesErrors::[Message];
 
 attribute givenLocation, translation<Expr>, escapeStorageClassesErrors occurs on AST;
 

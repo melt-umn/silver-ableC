@@ -1,6 +1,6 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax;
 
-imports silver:langutil;
+--imports silver:langutil;
 
 imports silver:definition:core;
 imports edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
