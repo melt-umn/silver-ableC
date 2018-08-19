@@ -46,7 +46,7 @@ melt.trynode('silver-ableC') {
     }
     
     // Upon succeeding at initial build, archive for future builds
-    archiveArtifacts(artifacts: "jars/*.jar", fingerprint: true)
+    archiveArtifacts(artifacts: "${SILVER_ABLEC_BASE}/jars/*.jar", fingerprint: true)
   }
 
   stage ("Modular Analyses") {
