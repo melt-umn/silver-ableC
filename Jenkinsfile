@@ -7,9 +7,9 @@ melt.setProperties(silverBase: true, ablecBase: true)
 melt.trynode('silver-ableC') {
   melt.clearGenerated()
   
-  def SILVER_ABLEC_BASE = env.WORKSPACE
+  def SILVER_ABLEC_BASE = "${env.WORKSPACE}/extensions/silver-ableC"
   def ABLEC_BASE = ablec.resolveAbleC()
-  def ABLEC_GEN = "${SILVER_ABLEC_BASE}/generated"
+  def ABLEC_GEN = "${ABLEC_BASE}/generated"
   def SILVER_BASE = silver.resolveSilver()
   def newenv = silver.getSilverEnv(SILVER_BASE) + [
     "ABLEC_BASE=${ABLEC_BASE}",
@@ -17,9 +17,18 @@ melt.trynode('silver-ableC') {
   ]
   
   stage ("Build") {
-
-    checkout scm
-  
+    // Get Silver-ableC
+    checkout([
+        $class: 'GitSCM',
+        branches: scm.branches,
+        doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
+        extensions: [
+          [$class: 'RelativeTargetDirectory', relativeTargetDir: "extensions/silver-ableC"],
+          [$class: 'CleanCheckout']
+        ],
+        submoduleCfg: scm.submoduleCfg,
+        userRemoteConfigs: scm.userRemoteConfigs])
+    
     // Get dependancies of ableC-silver
     def ext_dependencies = [
       "ableC-closure",
@@ -31,7 +40,9 @@ melt.trynode('silver-ableC') {
     }
 
     withEnv(newenv) {
-      sh './bootstrap-compile'
+      dir(SILVER_ABLEC_BASE) {
+        sh './bootstrap-compile'
+      }
     }
     
     // Upon succeeding at initial build, archive for future builds
@@ -41,7 +52,9 @@ melt.trynode('silver-ableC') {
   stage ("Modular Analyses") {
     // No MWDA for now, since Silver itself fails horribly
     withEnv(newenv) {
-      sh "./mda-test"
+      dir(SILVER_ABLEC_BASE) {
+        sh "./mda-test"
+      }
     }
   }
 
