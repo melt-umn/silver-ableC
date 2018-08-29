@@ -8,7 +8,7 @@ marking terminal AbleCParameters_t 'ableC_Parameters' lexer classes {KEYWORD, RE
 marking terminal AbleCStmt_t       'ableC_Stmt'       lexer classes {KEYWORD, RESERVED};
 marking terminal AbleCExpr_t       'ableC_Expr'       lexer classes {KEYWORD, RESERVED};
 
-temp_imp_ide_font font_escape color(160, 32, 240) bold italic;
+temp_imp_ide_font font_escape color(123, 0, 82) bold italic;
 lexer class Escape font=font_escape;
 
 terminal EscapeDecls_t             '$Decls'             lexer classes {Escape, Ckeyword};
