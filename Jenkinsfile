@@ -8,13 +8,25 @@ melt.trynode('silver-ableC') {
   melt.clearGenerated()
   
   def SILVER_ABLEC_BASE = "${env.WORKSPACE}/extensions/silver-ableC"
+  def SILVER_ABLEC_GEN = "${env.WORKSPACE}/generated"
   def ABLEC_BASE = ablec.resolveAbleC()
-  def ABLEC_GEN = "${env.WORKSPACE}/generated"
   def SILVER_BASE = silver.resolveSilver()
   def newenv = silver.getSilverEnv(SILVER_BASE) + [
     "ABLEC_BASE=${ABLEC_BASE}",
     "EXTS_BASE=${env.WORKSPACE}/extensions"
   ]
+  if (params.SILVER_GEN != 'no' || params.ABLEC_GEN != 'no') {
+    def SILVER_HOST_GEN = ""
+    if (params.SILVER_GEN != 'no') {
+      echo "Using existing Silver generated files: ${params.SILVER_GEN}"
+      SILVER_HOST_GEN << "${params.SILVER_GEN}:"
+    }
+    if (params.ABLEC_GEN != 'no') {
+      echo "Using existing ableC generated files: ${params.ABLEC_GEN}"
+      SILVER_HOST_GEN << "${params.ABLEC_GEN}:"
+    }
+    newenv << "SILVER_HOST_GEN=${SILVER_HOST_GEN}"
+  }
   
   stage ("Build") {
     // Get Silver-ableC
@@ -72,8 +84,9 @@ melt.trynode('silver-ableC') {
 
     def tasks = [:]
     def newargs = [SILVER_BASE: SILVER_BASE,
+                   SILVER_GEN: params.SILVER_GEN == 'no'? SILVER_ABLEC_GEN : params.SILVER_GEN,
                    ABLEC_BASE: ABLEC_BASE,
-                   ABLEC_GEN: ABLEC_GEN,
+                   ABLEC_GEN: params.ABLEC_GEN == 'no'? SILVER_ABLEC_GEN : params.ABLEC_GEN,
                    SILVER_ABLEC_BASE: SILVER_ABLEC_BASE]
     tasks << extensions.collectEntries { t ->
       [(t): { melt.buildProject("/melt-umn/${t}", newargs) }]
