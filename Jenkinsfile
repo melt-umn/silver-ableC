@@ -24,7 +24,6 @@ melt.trynode('silver-ableC') {
     echo "Using existing ableC generated files: ${params.ABLEC_GEN}"
     SILVER_HOST_GEN << "${params.ABLEC_GEN}"
   }
-  echo "SILVER_HOST_GEN: ${SILVER_HOST_GEN.join(':')}"
   newenv << "SILVER_HOST_GEN=${SILVER_HOST_GEN.join(':')}"
   
   stage ("Build") {
