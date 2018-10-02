@@ -152,6 +152,13 @@ top::ableC:ParameterDecl ::= e::Expr loc::Location
   forwards to error("TODO: forward value for escapeParameters");
 }
 
+abstract production escapeStructItemList
+top::ableC:StructItem ::= e::Expr loc::Location
+{
+  top.pp = pp"$$StructItemList{${text(e.unparse)}}";
+  forwards to error("TODO: forward value for escapeStructItemList");
+}
+
 abstract production escapeTypeName
 top::ableC:TypeName ::= e::Expr
 {

@@ -179,6 +179,24 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters", _, _ ->
         errorExpr([err(givenLocation, "$Parameters may only occur as a member of Parameters")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consStructItem",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItem",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStructItemList",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItem", _, _ ->
+        errorExpr([err(givenLocation, "$StructItemList may only occur as a member of StructItemList")], location=givenLocation)
     -- Default
     | _, _, _ ->
         application(

@@ -20,8 +20,10 @@ concrete productions top::Expr
 | 'ableC_Parameters' InAbleC edu:umn:cs:melt:ableC:concretesyntax:LCurly_t cst::ParameterList_c edu:umn:cs:melt:ableC:concretesyntax:RCurly_t NotInAbleC
   { forwards to ableCParametersLiteral(foldParameterDecl(cst.ast), location=top.location); }
 | 'ableC_BaseTypeExpr' InAbleC edu:umn:cs:melt:ableC:concretesyntax:LCurly_t cst::DeclarationSpecifiers_c edu:umn:cs:melt:ableC:concretesyntax:RCurly_t NotInAbleC
-  { cst.givenQualifiers = cst.typeQualifiers;
-    forwards to ableCBaseTypeExprLiteral(figureOutTypeFromSpecifiers(cst.location, cst.typeQualifiers, cst.preTypeSpecifiers, cst.realTypeSpecifiers, cst.mutateTypeSpecifiers), location=top.location); }
+  {
+    cst.givenQualifiers = cst.typeQualifiers;
+    forwards to ableCBaseTypeExprLiteral(figureOutTypeFromSpecifiers(cst.location, cst.typeQualifiers, cst.preTypeSpecifiers, cst.realTypeSpecifiers, cst.mutateTypeSpecifiers), location=top.location);
+  }
 | 'ableC_Stmt' InAbleC edu:umn:cs:melt:ableC:concretesyntax:LCurly_t cst::BlockItemList_c edu:umn:cs:melt:ableC:concretesyntax:RCurly_t NotInAbleC
   { forwards to ableCStmtLiteral(foldStmt(cst.ast), location=top.location); }
 | 'ableC_Expr' InAbleC edu:umn:cs:melt:ableC:concretesyntax:LCurly_t cst::Expr_c edu:umn:cs:melt:ableC:concretesyntax:RCurly_t NotInAbleC
@@ -72,6 +74,9 @@ concrete productions top::ParameterDeclaration_c
     top.declaredIdents = [];
     top.ast = escapeParameters(e, top.location);
   }
+concrete productions top::StructDeclaration_c
+| '$StructItemList' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = [escapeStructItemList(e, top.location)]; }
 concrete productions top::TypeName_c
 | '$TypeName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeTypeName(e); }
