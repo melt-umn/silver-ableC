@@ -32,6 +32,13 @@ top::Expr ::= ast::ableC:Parameters
   forwards to translate(top.location, reflect(new(ast)));
 }
 
+abstract production ableCBaseTypeExprLiteral
+top::Expr ::= ast::ableC:BaseTypeExpr
+{
+  top.unparse = s"ableC_BaseTypeExpr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translate(top.location, reflect(new(ast)));
+}
+
 abstract production ableCStmtLiteral
 top::Expr ::= ast::ableC:Stmt
 {

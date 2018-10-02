@@ -2,11 +2,12 @@ grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax;
 
 imports silver:definition:regex;
 
-marking terminal AbleCDecls_t      'ableC_Decls'      lexer classes {KEYWORD, RESERVED};
-marking terminal AbleCDecl_t       'ableC_Decl'       lexer classes {KEYWORD, RESERVED};
-marking terminal AbleCParameters_t 'ableC_Parameters' lexer classes {KEYWORD, RESERVED};
-marking terminal AbleCStmt_t       'ableC_Stmt'       lexer classes {KEYWORD, RESERVED};
-marking terminal AbleCExpr_t       'ableC_Expr'       lexer classes {KEYWORD, RESERVED};
+marking terminal AbleCDecls_t        'ableC_Decls'        lexer classes {KEYWORD, RESERVED};
+marking terminal AbleCDecl_t         'ableC_Decl'         lexer classes {KEYWORD, RESERVED};
+marking terminal AbleCParameters_t   'ableC_Parameters'   lexer classes {KEYWORD, RESERVED};
+marking terminal AbleCBaseTypeExpr_t 'ableC_BaseTypeExpr' lexer classes {KEYWORD, RESERVED};
+marking terminal AbleCStmt_t         'ableC_Stmt'         lexer classes {KEYWORD, RESERVED};
+marking terminal AbleCExpr_t         'ableC_Expr'         lexer classes {KEYWORD, RESERVED};
 
 temp_imp_ide_font font_escape color(123, 0, 82) bold italic;
 lexer class Escape font=font_escape;
