@@ -182,7 +182,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consStructItem",
       consAST(
         nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItem",
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList",
           consAST(a, consAST(locAST, nilAST())),
           nilNamedAST()),
         consAST(rest, nilAST())),
@@ -195,7 +195,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
               [e, rest.translation])
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItem", _, _ ->
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList", _, _ ->
         errorExpr([err(givenLocation, "$StructItemList may only occur as a member of StructItemList")], location=givenLocation)
     -- Default
     | _, _, _ ->
