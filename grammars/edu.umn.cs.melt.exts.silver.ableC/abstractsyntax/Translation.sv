@@ -197,6 +197,24 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList", _, _ ->
         errorExpr([err(givenLocation, "$StructItemList may only occur as a member of StructItemList")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consEnumItem",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendEnumItemList",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList", _, _ ->
+        errorExpr([err(givenLocation, "$EnumItemList may only occur as a member of EnumItemList")], location=givenLocation)
     -- Default
     | _, _, _ ->
         application(

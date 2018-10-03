@@ -77,6 +77,9 @@ concrete productions top::ParameterDeclaration_c
 concrete productions top::StructDeclaration_c
 | '$StructItemList' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = [escapeStructItemList(e, top.location)]; }
+concrete productions top::Enumerator_c
+| '$EnumItemList' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = [escapeEnumItemList(e, top.location)]; }
 concrete productions top::TypeName_c
 | '$TypeName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeTypeName(e); }

@@ -159,6 +159,13 @@ top::ableC:StructItem ::= e::Expr loc::Location
   forwards to error("TODO: forward value for escapeStructItemList");
 }
 
+abstract production escapeEnumItemList
+top::ableC:EnumItem ::= e::Expr loc::Location
+{
+  top.pp = pp"$$EnumItemList{${text(e.unparse)}}";
+  forwards to error("TODO: forward value for escapeEnumItemList");
+}
+
 abstract production escapeTypeName
 top::ableC:TypeName ::= e::Expr
 {
