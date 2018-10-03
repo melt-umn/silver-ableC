@@ -149,7 +149,10 @@ abstract production escapeParameters
 top::ableC:ParameterDecl ::= e::Expr loc::Location
 {
   top.pp = pp"$$Parameters{${text(e.unparse)}}";
-  forwards to error("TODO: forward value for escapeParameters");
+  -- TODO: forward value for escapeParameters
+  -- This needs to be an actual value since we pattern match on Parameters while
+  -- constructing the AST.
+  forwards to ableC:parameterDecl([], ableC:errorTypeExpr([]), ableC:baseTypeExpr(), ableC:nothingName(), ableC:nilAttribute());
 }
 
 abstract production escapeStructItemList
