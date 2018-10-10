@@ -161,6 +161,24 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", _, _ ->
         errorExpr([err(givenLocation, "$Exprs may only occur as a member of Exprs")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeNames",
+          consAST(a, nilAST()),
+          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendNames",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeNames", _, _ ->
+        errorExpr([err(givenLocation, "$Names may only occur as a member of Names")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
       consAST(
         nonterminalAST(

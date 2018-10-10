@@ -24,6 +24,7 @@ terminal EscapeName_t              '$Name'              lexer classes {Escape, C
 terminal EscapeTName_t             '$TName'             lexer classes {Escape, Ckeyword};
 terminal Escape_name_t             '$name'              lexer classes {Escape, Ckeyword};
 terminal Escape_tname_t            '$tname'             lexer classes {Escape, Ckeyword};
+terminal EscapeNames_t             '$Names'             lexer classes {Escape, Ckeyword};
 terminal EscapeStorageClasses      '$StorageClasses'    lexer classes {Escape, Ckeyword};
 terminal EscapeParameters_t        '$Parameters'        lexer classes {Escape, Ckeyword};
 terminal EscapeStructItemList_t    '$StructItemList'    lexer classes {Escape, Ckeyword};
@@ -33,7 +34,6 @@ terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Escape, C
 --terminal EscapeTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {Escape, Ckeyword};
 terminal EscapeType_t              '$directTypeExpr'    lexer classes {Escape, Ckeyword};
 terminal EscapeAttrib_t            '$Attrib'            lexer classes {Escape, Ckeyword}, dominates {AttributeNameUnfetterdByKeywords_t};
-
 -- Workarounds for weirdness with ignore terminals
 parser attribute inAbleC::Boolean action { inAbleC = false; };
 terminal InAbleC '' action { inAbleC = true; };
