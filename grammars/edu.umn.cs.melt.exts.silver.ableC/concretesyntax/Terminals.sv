@@ -29,6 +29,7 @@ terminal EscapeStorageClasses      '$StorageClasses'    lexer classes {Escape, C
 terminal EscapeParameters_t        '$Parameters'        lexer classes {Escape, Ckeyword};
 terminal EscapeStructItemList_t    '$StructItemList'    lexer classes {Escape, Ckeyword};
 terminal EscapeEnumItemList_t      '$EnumItemList'      lexer classes {Escape, Ckeyword};
+terminal EscapeTypeNames_t         '$TypeNames'         lexer classes {Escape, Ckeyword};
 terminal EscapeTypeName_t          '$TypeName'          lexer classes {Escape, Ckeyword};
 terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Escape, Ckeyword};
 --terminal EscapeTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {Escape, Ckeyword};

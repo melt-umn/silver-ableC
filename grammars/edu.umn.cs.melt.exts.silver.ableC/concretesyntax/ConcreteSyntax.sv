@@ -83,6 +83,8 @@ concrete productions top::Enumerator_c
 | '$EnumItemList' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = [escapeEnumItemList(e, top.location)]; }
 concrete productions top::TypeName_c
+| '$TypeNames' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
+  { top.ast = escapeTypeNames(e); }
 | '$TypeName' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeTypeName(e); }
 concrete productions top::TypeSpecifier_c
