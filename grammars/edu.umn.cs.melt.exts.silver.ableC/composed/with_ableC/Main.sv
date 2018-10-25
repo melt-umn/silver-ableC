@@ -1,7 +1,6 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_ableC;
 
 import silver:host;
-import silver:host:env;
 import silver:translation:java;
 import silver:driver;
 
@@ -24,6 +23,8 @@ parser svParse::Root {
   silver:extension:doc;
   silver:extension:functorattrib;
   silver:extension:monad;
+  silver:extension:reflection;
+  silver:extension:silverconstruction;
   
   silver:modification:let_fix;
   silver:modification:lambda_fn;
@@ -40,22 +41,8 @@ parser svParse::Root {
   edu:umn:cs:melt:exts:silver:ableC;
 }
 
-parser sviParse::IRoot {
-  silver:host:env;
-  silver:definition:flow:env_parser;
-  
-  silver:modification:collection:env_parser;
-  silver:modification:autocopyattr:env_parser;
-  silver:modification:ffi:env_parser;
-  silver:modification:typedecl:env_parser;
-  silver:modification:copper:env_parser;
-  silver:modification:impide:env_parser;
-
-  silver:extension:list:env_parser;
-}
-
 function main 
 IOVal<Integer> ::= args::[String] ioin::IO
 {
-  return cmdLineRun(args, svParse, sviParse, ioin);
+  return cmdLineRun(args, svParse, ioin);
 }

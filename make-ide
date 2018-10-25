@@ -2,13 +2,16 @@
 
 set -eu
 
+SILVER_BASE=$(cd ${SILVER_BASE:-../../silver} && pwd)
+SILVER_ABLEC_BASE=$(pwd)
+
 # Make sure any compiler changes make it before we build
 ./self-compile
 
 # Rebuild the IDE-specific runtime jars
-cd ../../silver/runtime/imp
+cd $SILVER_BASE/runtime/imp
 ./build.sh
-cd ../../../extensions/silver-ableC
+cd $SILVER_ABLEC_BASE
 
 # Create plug-in sources and .class files.
 # this creates an edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all.jar that is not used, but
@@ -18,7 +21,7 @@ SV_BUILD_TARGET="edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all" ./self
 # Create the Eclipse repository.  
 # The repository is in the generated/ide/edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all
 # directory.  
-cd ../../silver/generated/ide/edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all
+cd $SILVER_BASE/generated/ide/edu.umn.cs.melt.exts.silver.ableC.composed.ide_with_all
 mvn package
 
 TARGET=$(pwd)/updatesite/target/repository

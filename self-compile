@@ -2,8 +2,12 @@
 
 set -eu
 
-INCLUDE_DIRS=(../../ableC/grammars ../*/grammars)
-INCLUDES=${INCLUDE_DIRS[@]/#/-I ../}
+ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
+EXTS_BASE=$(cd ${EXTS_BASE:-..} && pwd)
+SILVER_ABLEC_BASE=$(pwd)
+
+INCLUDE_DIRS=($ABLEC_BASE/grammars $EXTS_BASE/*/grammars $SILVER_ABLEC_BASE/grammars)
+INCLUDES=${INCLUDE_DIRS[@]/#/-I }
 
 SV_BUILD_TARGET=${SV_BUILD_TARGET:-"edu:umn:cs:melt:exts:silver:ableC:composed:with_all"}
 

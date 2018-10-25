@@ -13,7 +13,7 @@ synthesized attribute translation<a>::a;
 synthesized attribute foundLocation::Maybe<Location>;
 autocopy attribute givenLocation::Location;
 
-synthesized attribute escapeStorageClassesErrors::[silver:definition:core:Message];
+synthesized attribute escapeStorageClassesErrors::[Message];
 
 attribute givenLocation, translation<Expr>, escapeStorageClassesErrors occurs on AST;
 
@@ -142,7 +142,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls", _, _ ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
+        errorExpr([err(givenLocation, "$Decls may only occur as a member of Decls")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
       consAST(
         nonterminalAST(
@@ -160,7 +160,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", _, _ ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
+        errorExpr([err(givenLocation, "$Exprs may only occur as a member of Exprs")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
       consAST(
         nonterminalAST(
@@ -178,7 +178,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters", _, _ ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
+        errorExpr([err(givenLocation, "$Parameters may only occur as a member of Parameters")], location=givenLocation)
     -- Default
     | _, _, _ ->
         application(
@@ -199,6 +199,28 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     
     children.givenLocation = givenLocation;
     annotations.givenLocation = givenLocation;
+}
+
+aspect production terminalAST
+top::AST ::= terminalName::String lexeme::String location::Location
+{
+  local locationAST::AST = reflect(new(location));
+  locationAST.givenLocation = top.givenLocation;
+
+  top.translation =
+    terminalConstructor(
+      'terminal', '(',
+      nominalTypeExpr(
+        makeQNameType(terminalName, top.givenLocation), botlNone(location=top.givenLocation),
+        location=top.givenLocation),
+      ',',
+      stringConst(
+        terminal(String_t, s"\"${escapeString(lexeme)}\"", top.givenLocation),
+        location=top.givenLocation),
+      ',',
+      locationAST.translation,
+      ')', location=top.givenLocation);
+  top.escapeStorageClassesErrors = [];
 }
 
 aspect production listAST
@@ -360,4 +382,15 @@ QName ::= n::String loc::Location
       qNameCons(_, ':', _, location=loc),
       qNameId(last(ns), location=loc),
       init(ns));
+}
+
+function makeQNameType
+QNameType ::= n::String loc::Location
+{
+  local ns::[String] = explode(":", n);
+  return
+    foldr(
+      qNameTypeCons(_, ':', _, location=loc),
+      qNameTypeId(terminal(IdUpper_t, last(ns), loc), location=loc),
+      map(makeName(_, loc), init(ns)));
 }
