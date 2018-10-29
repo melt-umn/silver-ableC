@@ -25,6 +25,7 @@ parser svParse::Root {
   silver:extension:monad;
   silver:extension:reflection;
   silver:extension:silverconstruction;
+  silver:extension:constructparser;
   
   silver:modification:let_fix;
   silver:modification:lambda_fn;

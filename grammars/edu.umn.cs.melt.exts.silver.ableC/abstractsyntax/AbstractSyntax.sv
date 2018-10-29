@@ -32,6 +32,13 @@ top::Expr ::= ast::ableC:Parameters
   forwards to translate(top.location, reflect(new(ast)));
 }
 
+abstract production ableCBaseTypeExprLiteral
+top::Expr ::= ast::ableC:BaseTypeExpr
+{
+  top.unparse = s"ableC_BaseTypeExpr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translate(top.location, reflect(new(ast)));
+}
+
 abstract production ableCStmtLiteral
 top::Expr ::= ast::ableC:Stmt
 {
@@ -131,6 +138,13 @@ top::ableC:Name ::= e::Expr
   forwards to ableC:name("<unknown type name>", location=builtin);
 }
 
+abstract production escapeNames
+top::ableC:Name ::= e::Expr
+{
+  top.pp = pp"$$Names{${text(e.unparse)}}";
+  forwards to ableC:name("<unknown>", location=builtin);
+}
+
 abstract production escapeStorageClasses
 top::ableC:StorageClass ::= e::Expr loc::Location
 {
@@ -142,7 +156,31 @@ abstract production escapeParameters
 top::ableC:ParameterDecl ::= e::Expr loc::Location
 {
   top.pp = pp"$$Parameters{${text(e.unparse)}}";
-  forwards to error("TODO: forward value for escapeParameters");
+  -- TODO: forward value for escapeParameters
+  -- This needs to be an actual value since we pattern match on Parameters while
+  -- constructing the AST.
+  forwards to ableC:parameterDecl([], ableC:errorTypeExpr([]), ableC:baseTypeExpr(), ableC:nothingName(), ableC:nilAttribute());
+}
+
+abstract production escapeStructItemList
+top::ableC:StructItem ::= e::Expr loc::Location
+{
+  top.pp = pp"$$StructItemList{${text(e.unparse)}}";
+  forwards to error("TODO: forward value for escapeStructItemList");
+}
+
+abstract production escapeEnumItemList
+top::ableC:EnumItem ::= e::Expr loc::Location
+{
+  top.pp = pp"$$EnumItemList{${text(e.unparse)}}";
+  forwards to error("TODO: forward value for escapeEnumItemList");
+}
+
+abstract production escapeTypeNames
+top::ableC:TypeName ::= e::Expr
+{
+  top.pp = pp"$$TypeNames{${text(e.unparse)}}";
+  forwards to error("TODO: forward value for escapeTypeNames");
 }
 
 abstract production escapeTypeName

@@ -53,6 +53,8 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       end
     -- "Indirect" escape productions
     else if
+      -- These 2 are split out seperate to avoid duplicating code, because they
+      -- are handled in the same way.
       containsBy(
         stringEq, prodName,
         ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escape_name",
@@ -130,7 +132,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         nonterminalAST(
           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls",
           consAST(a, nilAST()),
-          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
+          nilNamedAST()),
         consAST(rest, nilAST())),
         nilNamedAST() ->
         case reify(a) of
@@ -161,6 +163,40 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", _, _ ->
         errorExpr([err(givenLocation, "$Exprs may only occur as a member of Exprs")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consName",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeNames",
+          consAST(a, nilAST()),
+          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendNames",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consTypeName",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames",
+          consAST(a, nilAST()),
+          nilNamedAST()),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendTypeNames",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames", _, _ ->
+        errorExpr([err(givenLocation, "$TypeNames may only occur as a member of TypeNames")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
       consAST(
         nonterminalAST(
@@ -179,6 +215,42 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters", _, _ ->
         errorExpr([err(givenLocation, "$Parameters may only occur as a member of Parameters")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consStructItem",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStructItemList",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList", _, _ ->
+        errorExpr([err(givenLocation, "$StructItemList may only occur as a member of StructItemList")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consEnumItem",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendEnumItemList",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList", _, _ ->
+        errorExpr([err(givenLocation, "$EnumItemList may only occur as a member of EnumItemList")], location=givenLocation)
     -- Default
     | _, _, _ ->
         application(
