@@ -43,7 +43,8 @@ melt.trynode('silver-ableC') {
     def ext_dependencies = [
       "ableC-closure",
       "ableC-refcount-closure",
-      "ableC-templating"
+      "ableC-templating",
+      "ableC-string"
     ]
     for (ext in ext_dependencies) {
       ablec.checkoutExtension(ext)
