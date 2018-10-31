@@ -19,8 +19,12 @@ echo "Building Silver + ableC with vanilla Silver ..."
 silver -I ../grammars -I $ABLEC_BASE/grammars $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_ableC
 mv edu.umn.cs.melt.exts.silver.ableC.composed.with_ableC.jar ../jars/
 
-echo "Building Silver + ableC + all extensions with Silver + ableC ..."
-silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_ableC.jar $INCLUDES $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_all
+echo "Building Silver + ableC + base extensions with Silver + ableC ..."
+silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_ableC.jar $INCLUDES $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_base
+mv edu.umn.cs.melt.exts.silver.ableC.composed.with_base.jar ../jars/
+
+echo "Building Silver + ableC + all extensions with Silver + ableC + base extensions ..."
+silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_base.jar $INCLUDES $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_all
 mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
 
 echo "Building Silver + ableC + all extensions with Silver + ableC + all extensions ..."

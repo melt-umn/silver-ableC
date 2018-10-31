@@ -1,4 +1,4 @@
-grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_all;
+grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_base;
 
 import silver:host;
 import silver:translation:java;
@@ -51,8 +51,6 @@ parser svParse::Root {
   edu:umn:cs:melt:exts:ableC:templating;
   edu:umn:cs:melt:exts:ableC:string;
   edu:umn:cs:melt:exts:ableC:constructor;
-  edu:umn:cs:melt:exts:ableC:algebraicDataTypes;
-  edu:umn:cs:melt:exts:ableC:templateAlgebraicDataTypes;
 }
 
 function main 

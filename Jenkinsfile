@@ -44,7 +44,10 @@ melt.trynode('silver-ableC') {
       "ableC-closure",
       "ableC-refcount-closure",
       "ableC-templating",
-      "ableC-string"
+      "ableC-string",
+      "ableC-constructor",
+      "ableC-algebraic-data-types",
+      "ableC-template-algebraic-data-types"
     ]
     for (ext in ext_dependencies) {
       ablec.checkoutExtension(ext)
