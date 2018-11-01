@@ -81,6 +81,8 @@ melt.trynode('silver-ableC') {
       "ableC-refcount-closure",
       "ableC-string",
       "ableC-vector",
+      "ableC-interval",
+      "ableC-watch",
       "ableC-nondeterministic-search", "ableC-nondeterministic-search-benchmarks",
       "ableC-algebraic-data-types", "ableC-template-algebraic-data-types",
       "ableC-sample-projects",
