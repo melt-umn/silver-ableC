@@ -159,7 +159,7 @@ top::ableC:ParameterDecl ::= e::Expr loc::Location
   -- TODO: forward value for escapeParameters
   -- This needs to be an actual value since we pattern match on Parameters while
   -- constructing the AST.
-  forwards to ableC:parameterDecl([], ableC:errorTypeExpr([]), ableC:baseTypeExpr(), ableC:nothingName(), ableC:nilAttribute());
+  forwards to ableC:parameterDecl(ableC:nilStorageClass(), ableC:errorTypeExpr([]), ableC:baseTypeExpr(), ableC:nothingName(), ableC:nilAttribute());
 }
 
 abstract production escapeStructItemList

@@ -13,15 +13,7 @@ synthesized attribute translation<a>::a;
 synthesized attribute foundLocation::Maybe<Location>;
 autocopy attribute givenLocation::Location;
 
-synthesized attribute escapeStorageClassesErrors::[Message];
-
-attribute givenLocation, translation<Expr>, escapeStorageClassesErrors occurs on AST;
-
-aspect default production
-top::AST ::=
-{
-  top.escapeStorageClassesErrors = [];
-}
+attribute givenLocation, translation<Expr> occurs on AST;
 
 aspect production nonterminalAST
 top::AST ::= prodName::String children::ASTs annotations::NamedASTs
@@ -197,6 +189,24 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames", _, _ ->
         errorExpr([err(givenLocation, "$TypeNames may only occur as a member of TypeNames")], location=givenLocation)
+    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consStorageClass",
+      consAST(
+        nonterminalAST(
+          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
+          consAST(a, consAST(locAST, nilAST())),
+          nilNamedAST()),
+        consAST(rest, nilAST())),
+        nilNamedAST() ->
+        case reify(a) of
+        | right(e) ->
+            mkStrFunctionInvocation(
+              givenLocation,
+              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStorageClasses",
+              [e, rest.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end
+    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses", _, _ ->
+        errorExpr([err(givenLocation, "$StorageClasses may only occur as a member of StorageClasses")], location=givenLocation)
     | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
       consAST(
         nonterminalAST(
@@ -264,10 +274,6 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
             reverse(annotations.translation)),
           ')', location=givenLocation)
     end;
-    top.escapeStorageClassesErrors =
-      if prodName == "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses"
-      then [err(givenLocation, "$EscapeStorageClasses must be the only given storage class")]
-      else [];
     
     children.givenLocation = givenLocation;
     annotations.givenLocation = givenLocation;
@@ -292,42 +298,19 @@ top::AST ::= terminalName::String lexeme::String location::Location
       ',',
       locationAST.translation,
       ')', location=top.givenLocation);
-  top.escapeStorageClassesErrors = [];
 }
 
 aspect production listAST
 top::AST ::= vals::ASTs
 {
   top.translation =
-    case vals of
-    -- TODO: Workaround since we don't have a StorageClasses nonterminal yet
-    | consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
-          consAST(a, consAST(locAST, nilAST())),
-          nilNamedAST()),
-        nilAST()) ->
-        case reify(a) of
-        | right(e) -> e
-        | left(msg) -> error(s"Error in reifying child of production edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses:\n${msg}")
-        end
-    | consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses", _, _),
-        nilAST()) ->
-        error(s"Unexpected escape production: ${show(80, top.pp)}")
-    | _ -> 
-      if !null(vals.escapeStorageClassesErrors)
-      then errorExpr(vals.escapeStorageClassesErrors, location=top.givenLocation)
-      else
-        fullList(
-          '[',
-          foldr(
-            exprsCons(_, ',', _, location=top.givenLocation),
-            exprsEmpty(location=top.givenLocation),
-            vals.translation),
-          ']', location=top.givenLocation)
-    end;
+    fullList(
+      '[',
+      foldr(
+        exprsCons(_, ',', _, location=top.givenLocation),
+        exprsEmpty(location=top.givenLocation),
+        vals.translation),
+      ']', location=top.givenLocation);
 }
 
 aspect production stringAST
@@ -372,7 +355,7 @@ top::AST ::= x::a
     end;
 }
 
-attribute givenLocation, translation<[Expr]>, foundLocation, escapeStorageClassesErrors occurs on ASTs;
+attribute givenLocation, translation<[Expr]>, foundLocation occurs on ASTs;
 
 aspect production consAST
 top::ASTs ::= h::AST t::ASTs
@@ -388,7 +371,6 @@ top::ASTs ::= h::AST t::ASTs
         end
     | _ -> t.foundLocation
     end;
-  top.escapeStorageClassesErrors = h.escapeStorageClassesErrors ++ t.escapeStorageClassesErrors; 
 }
 
 aspect production nilAST
@@ -396,7 +378,6 @@ top::ASTs ::=
 {
   top.translation = [];
   top.foundLocation = nothing();
-  top.escapeStorageClassesErrors = [];
 }
 
 attribute givenLocation, translation<[AnnoExpr]>, foundLocation occurs on NamedASTs;
