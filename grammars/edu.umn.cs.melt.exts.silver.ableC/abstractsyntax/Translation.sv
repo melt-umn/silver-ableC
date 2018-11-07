@@ -25,19 +25,19 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
   escapeTranslation := nothing();
   
   -- "Direct" escape productions
+  production attribute directEscapeProductions::[String] with ++;
+  directEscapeProductions :=
+    ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStmt",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecl",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeInitializer",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExpr",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeBaseTypeExpr",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeAttrib"];
   escapeTranslation <-
-    if
-      containsBy(
-        stringEq, prodName,
-        ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStmt",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecl",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeInitializer",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExpr",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTName",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeName",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeBaseTypeExpr",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeAttrib"])
+    if containsBy(stringEq, prodName, directEscapeProductions)
     then
       case children of
       | consAST(a, nilAST()) ->
