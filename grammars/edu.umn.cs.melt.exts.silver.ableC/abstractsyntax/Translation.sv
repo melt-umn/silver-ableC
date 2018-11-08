@@ -1,6 +1,7 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 
 imports silver:reflect;
+imports core:monad;
 
 function translate
 Expr ::= loc::Location ast::AST
@@ -48,6 +49,90 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
       end
     else nothing();
+  
+  -- "Collection" escape productions
+  -- Key: escape production name
+  -- Value: pair(nonterminal short name, pair(cons production name, append production name))
+  production attribute collectionEscapeProductions::[Pair<String Pair<String Pair<String String>>>] with ++;
+  collectionEscapeProductions :=
+    [pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls",
+       pair("Decls",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consDecl",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendDecls"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs",
+       pair("Exprs",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendExprs"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeNames",
+       pair("Names",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consName",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendNames"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames",
+       pair("TypeNames",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consTypeName",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendTypeNames"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
+       pair("StorageClasses",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consStorageClass",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStorageClasses"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters",
+       pair("Parameters",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendParameters"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList",
+       pair("StructItemList",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consStructItem",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStructItemList"))),
+     pair(
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList",
+       pair("EnumItemList",
+         pair(
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:consEnumItem",
+           "edu:umn:cs:melt:ableC:abstractsyntax:host:appendEnumItemList")))];
+  escapeTranslation <-
+    do (bindMaybe, returnMaybe) {
+      -- pair(escape production name, escape expr AST, rest AST)
+      escape::Pair<String Pair<AST Decorated AST>> <-
+        case children of
+        | consAST(
+            nonterminalAST(n, consAST(a, _), _),
+            consAST(rest, nilAST())) -> just(pair(n, pair(a, rest)))
+        | _ -> nothing()
+        end;
+      -- pair(nonterminal short name, pair(cons production name, append production name))
+      trans::Pair<String Pair<String String>> <-
+        lookupBy(stringEq, escape.fst, collectionEscapeProductions);
+      if prodName == trans.snd.fst then just(unit()) else nothing(); -- require prodName == trans.snd.fst
+      return
+        case reify(escape.snd.fst) of
+        | right(e) ->
+          mkStrFunctionInvocation(
+            givenLocation, trans.snd.snd, [e, escape.snd.snd.translation])
+        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+        end;
+    };
+  escapeTranslation <-
+    do (bindMaybe, returnMaybe) {
+      -- pair(nonterminal short name, pair(cons production name, append production name))
+      trans::Pair<String Pair<String String>> <-
+        lookupBy(stringEq, prodName, collectionEscapeProductions);
+      return
+        errorExpr([err(givenLocation, s"$$${trans.fst} may only occur as a member of ${trans.fst}")], location=givenLocation);
+    };
   
   -- "Indirect" escape productions
   escapeTranslation <-
@@ -129,162 +214,6 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         end
     | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr", _, _ ->
         error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
-    | _, _, _ -> nothing()
-    end;
-  
-  -- "Collection" escape productions
-  escapeTranslation <-
-    case prodName, children, annotations of
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consDecl",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls",
-          consAST(a, nilAST()),
-          nilNamedAST()),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendDecls",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls", _, _ ->
-        just(errorExpr([err(givenLocation, "$Decls may only occur as a member of Decls")], location=givenLocation))
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs",
-          consAST(a, nilAST()),
-          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendExprs",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs", _, _ ->
-        just(errorExpr([err(givenLocation, "$Exprs may only occur as a member of Exprs")], location=givenLocation))
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consName",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeNames",
-          consAST(a, nilAST()),
-          consNamedAST(namedAST("core:location", locAST), nilNamedAST())),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendNames",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consTypeName",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames",
-          consAST(a, nilAST()),
-          nilNamedAST()),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendTypeNames",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames", _, _ ->
-        just(errorExpr([err(givenLocation, "$TypeNames may only occur as a member of TypeNames")], location=givenLocation))
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consStorageClass",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
-          consAST(a, consAST(locAST, nilAST())),
-          nilNamedAST()),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStorageClasses",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses", _, _ ->
-        just(errorExpr([err(givenLocation, "$StorageClasses may only occur as a member of StorageClasses")], location=givenLocation))
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters",
-          consAST(a, consAST(locAST, nilAST())),
-          nilNamedAST()),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendParameters",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters", _, _ ->
-        just(errorExpr([err(givenLocation, "$Parameters may only occur as a member of Parameters")], location=givenLocation))
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consStructItem",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList",
-          consAST(a, consAST(locAST, nilAST())),
-          nilNamedAST()),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStructItemList",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList", _, _ ->
-        just(errorExpr([err(givenLocation, "$StructItemList may only occur as a member of StructItemList")], location=givenLocation))
-    | "edu:umn:cs:melt:ableC:abstractsyntax:host:consEnumItem",
-      consAST(
-        nonterminalAST(
-          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList",
-          consAST(a, consAST(locAST, nilAST())),
-          nilNamedAST()),
-        consAST(rest, nilAST())),
-        nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:host:appendEnumItemList",
-              [e, rest.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList", _, _ ->
-        just(errorExpr([err(givenLocation, "$EnumItemList may only occur as a member of EnumItemList")], location=givenLocation))
     | _, _, _ -> nothing()
     end;
     
