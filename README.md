@@ -11,7 +11,7 @@ is equivalent to writing
 ```
 seqStmt(declStmt(variableDecls(...)), seqStmt(declStmt(variableDecls(...)), returnStmt(addExpr(...))))
 ```
-except that the locations in the resulting AST correspond to the location of the constructs within the Silver source file.  These "bridge productions" from Silver to ableC syntax are provided for the nonterminals `Decls`, `Decl`, `Parameters`, `Stmt`, and `Expr`.  
+except that the locations in the resulting AST correspond to the location of the constructs within the Silver source file.  These "bridge productions" from Silver to ableC syntax are provided for the nonterminals `Decls`, `Decl`, `Parameters`, `BaseTypeExpr`,`Stmt`, and `Expr`.  
 
 It is frequently the case that we may wish to construct a complex AST, with some portions that are non-constant; for example, in defining the forward of an ableC extension production, the children of the production will likely need to be "plugged in" at some point in a more complex translation.  To remedy this, we introduce bridge productions from ableC back to Silver syntax, for example
 ```
@@ -22,7 +22,7 @@ ableC_Stmt {
   $Stmt{s}
 }
 ```
-Such constructs are provided for the `Decls`, `Decl`, `Parameters`, `Stmt`, `Initializer`, `Expr`, `Name`, `TypeName`, `BaseTypeExpr`, and `Attrib` nonterminals.  In addition, the `$TName{}` escape also accepts a `Name` and may be used where a type identifier is expected (this is distinct from `$Name` due to the syntactic ambiguity present in C.)  
+Such constructs are provided for the `Decls`, `Decl`, `Stmt`, `Initializer`, `Exprs`, `Expr`, `Names`, `Name`, `StorageClasses`, `Parameters`, `StructItemList`, `EnumItemList`, `TypeNames`, `TypeName`, `BaseTypeExpr`, and `Attrib` nonterminals.  In addition, the `$TName{}` escape also accepts a `Name` and may be used where a type identifier is expected (this is distinct from `$Name` due to the syntactic ambiguity present in C.)  
 
 Escape productions are also provided for several "collection" nonterminals, `Exprs`, `StorageClasses`, and `Parameters` - these escapes are written as a single member of the collection, and code is generated to allow for the appropriate append operations:
 ```
@@ -56,7 +56,8 @@ More documentation:
 * [Getting started with using the extension](GETTING_STARTED.md)
 * [How it works](IMPLEMENTATION.md)
 
-ableC extensions using this extension:
+Some ableC extensions using this extension:
 * [ableC-closure](https://github.com/melt-umn/ableC-closure)
 * [ableC-vector](https://github.com/melt-umn/ableC-vector)
 * [ableC-nondeterministic-search](https://github.com/melt-umn/ableC-nondeterministic-search)
+* [ableC-algebraic-data-types](https://github.com/melt-umn/ableC-algebraic-data-types)

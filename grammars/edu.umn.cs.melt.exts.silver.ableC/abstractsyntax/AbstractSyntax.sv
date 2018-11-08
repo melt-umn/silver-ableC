@@ -110,6 +110,14 @@ top::ableC:Expr ::= e::Expr
   forwards to ableC:errorExpr([], location=builtin);
 }
 
+abstract production escapeNames
+top::ableC:Name ::= e::Expr
+{
+  top.pp = pp"$$Names{${text(e.unparse)}}";
+  forwards to ableC:name("<unknown>", location=builtin);
+}
+
+
 abstract production escapeName
 top::ableC:Name ::= e::Expr
 {
@@ -137,14 +145,6 @@ top::ableC:Name ::= e::Expr
   top.pp = pp"$$tname{${text(e.unparse)}}";
   forwards to ableC:name("<unknown type name>", location=builtin);
 }
-
-abstract production escapeNames
-top::ableC:Name ::= e::Expr
-{
-  top.pp = pp"$$Names{${text(e.unparse)}}";
-  forwards to ableC:name("<unknown>", location=builtin);
-}
-
 abstract production escapeStorageClasses
 top::ableC:StorageClass ::= e::Expr loc::Location
 {

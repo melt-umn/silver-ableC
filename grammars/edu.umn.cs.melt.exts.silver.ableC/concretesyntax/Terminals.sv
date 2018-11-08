@@ -20,11 +20,11 @@ terminal EscapeExprs_t             '$Exprs'             lexer classes {Escape, C
 terminal EscapeExpr_t              '$Expr'              lexer classes {Escape, Ckeyword};
 terminal EscapeIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Escape, Ckeyword};
 terminal EscapeStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Escape, Ckeyword};
+terminal EscapeNames_t             '$Names'             lexer classes {Escape, Ckeyword};
 terminal EscapeName_t              '$Name'              lexer classes {Escape, Ckeyword};
 terminal EscapeTName_t             '$TName'             lexer classes {Escape, Ckeyword};
 terminal Escape_name_t             '$name'              lexer classes {Escape, Ckeyword};
 terminal Escape_tname_t            '$tname'             lexer classes {Escape, Ckeyword};
-terminal EscapeNames_t             '$Names'             lexer classes {Escape, Ckeyword};
 terminal EscapeStorageClasses      '$StorageClasses'    lexer classes {Escape, Ckeyword};
 terminal EscapeParameters_t        '$Parameters'        lexer classes {Escape, Ckeyword};
 terminal EscapeStructItemList_t    '$StructItemList'    lexer classes {Escape, Ckeyword};
