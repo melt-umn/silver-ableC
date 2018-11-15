@@ -52,6 +52,7 @@ parser svParse::Root {
   edu:umn:cs:melt:exts:ableC:string;
   edu:umn:cs:melt:exts:ableC:constructor;
   edu:umn:cs:melt:exts:ableC:algebraicDataTypes;
+  edu:umn:cs:melt:exts:ableC:algebraicDataTypes:silverconstruction;
   edu:umn:cs:melt:exts:ableC:templateAlgebraicDataTypes;
 }
 
