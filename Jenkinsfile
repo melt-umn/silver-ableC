@@ -85,7 +85,7 @@ melt.trynode('silver-ableC') {
       "ableC-watch",
       "ableC-nondeterministic-search", "ableC-nondeterministic-search-benchmarks",
       "ableC-algebraic-data-types", "ableC-template-algebraic-data-types",
-      "ableC-unification",
+      "ableC-unification", "ableC-prolog",
       "ableC-sample-projects",
     ]
 
