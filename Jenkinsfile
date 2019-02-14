@@ -102,6 +102,12 @@ melt.trynode('silver-ableC') {
     parallel tasks
   }
 
+  if (env.BRANCH_NAME == 'develop') {
+    stage("Deploy") {
+      sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+    }
+  }
+
   /* If we've gotten all this way with a successful build, don't take up disk space */
   melt.clearGenerated()
 }
