@@ -16,7 +16,7 @@ export SVJVM_FLAGS="-Xmx5000M -Xss15M"
 mkdir -p build
 cd build
 
-silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar $INCLUDES $@ ${SV_BUILD_TARGET}
+silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar $INCLUDES --one-jar $@ ${SV_BUILD_TARGET}
 
 if [ -f edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ]; then
     mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
