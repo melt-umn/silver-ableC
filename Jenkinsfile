@@ -104,7 +104,9 @@ melt.trynode('silver-ableC') {
 
   if (env.BRANCH_NAME == 'develop') {
     stage("Deploy") {
-      sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+      dir(SILVER_ABLEC_BASE) {
+        sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+      }
     }
   }
 
