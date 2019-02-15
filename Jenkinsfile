@@ -38,8 +38,33 @@ melt.trynode('silver-ableC') {
         ],
         submoduleCfg: scm.submoduleCfg,
         userRemoteConfigs: scm.userRemoteConfigs])
-    
-    // Get dependancies of ableC-silver
+
+    // Try to get jars and avoid bootstrapping, if this is a fast build
+    def bootstrapRequired = true
+    def isFastBuild = (params.ABLEC_GEN != 'no')
+    if (isFastBuild) {
+      try {
+        // If the last build has artifacts, use those.
+        dir("${env.WORKSPACE}/extensions/silver-ableC") {
+          copyArtifacts(projectName: branchJob, selector: lastCompleted())
+        }
+        bootstrapRequired = false
+        melt.annotate("Silver-ableC jar from branch (prev).")
+      } catch (hudson.AbortException exc2) {
+        try {
+          // If there is a last successful build, use those.
+          dir("${env.WORKSPACE}/extensions/silver-ableC") {
+            copyArtifacts(projectName: branchJob, selector: lastSuccessful())
+          }
+          bootstrapRequired = false
+          melt.annotate("Silver-ableC jar from branch (successful).")
+        } catch (hudson.AbortException exc3) {
+          melt.annotate("Silver-ableC jar from branch (fresh).")
+        }
+      }
+    }
+
+    // Get dependancies of silver-ableC
     def ext_dependencies = [
       "ableC-closure",
       "ableC-refcount-closure",
@@ -52,10 +77,9 @@ melt.trynode('silver-ableC') {
     for (ext in ext_dependencies) {
       ablec.checkoutExtension(ext)
     }
-
     withEnv(newenv) {
       dir(SILVER_ABLEC_BASE) {
-        sh './bootstrap-compile'
+        sh (bootstrapRequired? './bootstrap-compile' : './self-compile')
       }
     }
     
