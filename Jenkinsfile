@@ -39,6 +39,20 @@ melt.trynode('silver-ableC') {
         submoduleCfg: scm.submoduleCfg,
         userRemoteConfigs: scm.userRemoteConfigs])
 
+    // Get dependancies of silver-ableC
+    def ext_dependencies = [
+      "ableC-closure",
+      "ableC-refcount-closure",
+      "ableC-templating",
+      "ableC-string",
+      "ableC-constructor",
+      "ableC-algebraic-data-types",
+      "ableC-template-algebraic-data-types"
+    ]
+    for (ext in ext_dependencies) {
+      ablec.checkoutExtension(ext)
+    }
+
     // Try to get jars and avoid bootstrapping, if this is a fast build
     def bootstrapRequired = true
     def isFastBuild = (params.ABLEC_GEN != 'no')
@@ -66,22 +80,26 @@ melt.trynode('silver-ableC') {
       }
     }
 
-    // Get dependancies of silver-ableC
-    def ext_dependencies = [
-      "ableC-closure",
-      "ableC-refcount-closure",
-      "ableC-templating",
-      "ableC-string",
-      "ableC-constructor",
-      "ableC-algebraic-data-types",
-      "ableC-template-algebraic-data-types"
-    ]
-    for (ext in ext_dependencies) {
-      ablec.checkoutExtension(ext)
+    // Try building with previous jars, if available
+    if (!bootstrapRequired) {
+      withEnv(newenv) {
+        dir(SILVER_ABLEC_BASE) {
+          if (sh(script: './self-compile', returnStatus: true) != 0) {
+            // An error occured, fall back to bootstrapping
+            echo "Self-compile build failure, falling back to bootstrap build"
+            melt.annotate("Self-compile failure.")
+            bootstrapRequired = true
+          }
+        }
+      }
     }
-    withEnv(newenv) {
-      dir(SILVER_ABLEC_BASE) {
-        sh (bootstrapRequired? './bootstrap-compile' : './self-compile')
+
+    // Perform a full bootstrap build, if required
+    if (bootstrapRequired) {
+      withEnv(newenv) {
+        dir(SILVER_ABLEC_BASE) {
+          sh './bootstrap-compile'
+        }
       }
     }
     
