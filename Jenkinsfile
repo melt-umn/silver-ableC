@@ -43,6 +43,8 @@ melt.trynode('silver-ableC') {
     def bootstrapRequired = true
     def isFastBuild = (params.ABLEC_GEN != 'no')
     if (isFastBuild) {
+      echo "Trying to get jars from silver-ableC branch ${env.BRANCH_NAME}"
+      String branchJob = "/melt-umn/silver-ableC/${hudson.Util.rawEncode(env.BRANCH_NAME)}"
       try {
         // If the last build has artifacts, use those.
         dir("${env.WORKSPACE}/extensions/silver-ableC") {
