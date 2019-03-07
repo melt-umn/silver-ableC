@@ -49,6 +49,7 @@ parser svParse::Root {
     over edu:umn:cs:melt:exts:ableC:refCountClosure:concretesyntax:lambdaExpr:Lambda_t;
   
   edu:umn:cs:melt:exts:ableC:templating;
+  edu:umn:cs:melt:exts:ableC:templating:silverconstruction;
   edu:umn:cs:melt:exts:ableC:string;
   edu:umn:cs:melt:exts:ableC:constructor;
 }
