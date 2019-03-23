@@ -217,22 +217,22 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | _, _, _ -> nothing()
     end;
     
-    top.translation =
-      fromMaybe(
-        application(
-          baseExpr(makeQName(prodName, givenLocation), location=givenLocation),
-          '(',
-          foldAppExprs(givenLocation, reverse(children.translation)),
-          ',',
-          foldl(
-            snocAnnoAppExprs(_, ',', _, location=givenLocation),
-            emptyAnnoAppExprs(location=givenLocation),
-            reverse(annotations.translation)),
-          ')', location=givenLocation),
-        escapeTranslation);
-    
-    children.givenLocation = givenLocation;
-    annotations.givenLocation = givenLocation;
+  top.translation =
+    fromMaybe(
+      application(
+        baseExpr(makeQName(prodName, givenLocation), location=givenLocation),
+        '(',
+        foldAppExprs(givenLocation, reverse(children.translation)),
+        ',',
+        foldl(
+          snocAnnoAppExprs(_, ',', _, location=givenLocation),
+          emptyAnnoAppExprs(location=givenLocation),
+          reverse(annotations.translation)),
+        ')', location=givenLocation),
+      escapeTranslation);
+  
+  children.givenLocation = givenLocation;
+  annotations.givenLocation = givenLocation;
 }
 
 aspect production terminalAST
