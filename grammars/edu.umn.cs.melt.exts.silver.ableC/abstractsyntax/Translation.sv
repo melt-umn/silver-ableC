@@ -1,7 +1,7 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 
 imports silver:reflect;
-imports silver:langutil:hostEmbedding;
+imports silver:hostEmbedding;
 imports core:monad;
 
 aspect production nonterminalAST
