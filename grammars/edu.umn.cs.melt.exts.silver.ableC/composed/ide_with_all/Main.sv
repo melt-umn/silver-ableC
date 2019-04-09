@@ -42,7 +42,7 @@ temp_imp_ide_dcl svParse ".sv" {
   }
 
   name "Silver-ableC";
-  version "0.1.2";
+  version "0.1.3";
   resource grammars "../../../../../../silver/grammars/";
   resource jars     "../../../../../../silver/jars/";
 }

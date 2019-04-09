@@ -24,6 +24,7 @@ parser svParse::Root {
   silver:extension:functorattrib;
   silver:extension:monad;
   silver:extension:reflection;
+  silver:extension:astconstruction;
   silver:extension:silverconstruction;
   silver:extension:constructparser;
   

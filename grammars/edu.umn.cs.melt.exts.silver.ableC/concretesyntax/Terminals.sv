@@ -1,6 +1,7 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax;
 
 imports silver:definition:regex;
+imports silver:reflect:concretesyntax;
 
 marking terminal AbleCDecls_t        'ableC_Decls'        lexer classes {KEYWORD, RESERVED};
 marking terminal AbleCDecl_t         'ableC_Decl'         lexer classes {KEYWORD, RESERVED};
@@ -40,19 +41,35 @@ parser attribute inAbleC::Boolean action { inAbleC = false; };
 terminal InAbleC '' action { inAbleC = true; };
 terminal NotInAbleC '' action { inAbleC = false; };
 
-disambiguate NewLine_t, RegexChar_t, WhiteSpace
+disambiguate NewLine_t, RegexChar_t, silver:definition:core:WhiteSpace
 {
   pluck if inAbleC then NewLine_t else WhiteSpace;
 }
-disambiguate NewLine_t, WhiteSpace
+disambiguate NewLine_t, silver:definition:core:WhiteSpace
 {
-  pluck if inAbleC then NewLine_t else WhiteSpace;
+  pluck if inAbleC then NewLine_t else silver:definition:core:WhiteSpace;
 }
-disambiguate Spaces_t, RegexChar_t, WhiteSpace
+disambiguate Spaces_t, RegexChar_t, silver:definition:core:WhiteSpace
 {
   pluck if inAbleC then Spaces_t else WhiteSpace;
 }
-disambiguate Spaces_t, WhiteSpace
+disambiguate Spaces_t, silver:definition:core:WhiteSpace
+{
+  pluck if inAbleC then Spaces_t else WhiteSpace;
+}
+disambiguate NewLine_t, RegexChar_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
+{
+  pluck if inAbleC then NewLine_t else WhiteSpace;
+}
+disambiguate NewLine_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
+{
+  pluck if inAbleC then NewLine_t else WhiteSpace;
+}
+disambiguate Spaces_t, RegexChar_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
+{
+  pluck if inAbleC then Spaces_t else WhiteSpace;
+}
+disambiguate Spaces_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
 {
   pluck if inAbleC then Spaces_t else WhiteSpace;
 }
