@@ -83,20 +83,13 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
           case reify(a) of
           | right(e) ->
             just(
-              application(
+              mkFullFunctionInvocation(
+                givenLocation,
                 baseExpr(
                   makeQName("edu:umn:cs:melt:ableC:abstractsyntax:host:name", givenLocation),
                   location=givenLocation),
-                '(',
-                foldAppExprs(givenLocation, [e]),
-                ',',
-                oneAnnoAppExprs(
-                  annoExpr(
-                    makeQName("location", givenLocation), '=',
-                    presentAppExpr(locAST.translation, location=givenLocation),
-                    location=givenLocation),
-                  location=givenLocation),
-                ')', location=givenLocation))
+                [e],
+                [pair("location", locAST.translation)]))
           | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
           end
       | _, _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
