@@ -94,53 +94,58 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
           end
       | _, _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
       end
-    else case prodName, children, annotations of
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr",
-      consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst",
-              [e, locAST.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr", _, _ ->
-        error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr",
-      consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation,
-              "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst",
-              [e, locAST.translation]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr", _, _ ->
-        error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr",
-      consAST(qualifiersAST, consAST(a, consAST(locAST, nilAST()))), nilNamedAST() ->
-        case reify(a) of
-        | right(e) ->
-          just(
-            mkStrFunctionInvocation(
-              givenLocation, "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
-              [mkStrFunctionInvocation(
-                 givenLocation,
-                 "edu:umn:cs:melt:ableC:abstractsyntax:host:addQualifiers",
-                 [access(
-                    qualifiersAST.translation, '.',
-                    qNameAttrOccur(
-                      makeQName("qualifiers", givenLocation), location=givenLocation),
-                    location=givenLocation),
-                  e])]))
-        | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
-        end
-    | "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr", _, _ ->
-        error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
-    | _, _, _ -> nothing()
+    else case top of
+    | AST {
+       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr(a, core:location=locAST)
+      } ->
+      case reify(a) of
+      | right(e) ->
+        just(
+          mkStrFunctionInvocation(
+            givenLocation,
+            "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst",
+            [e, locAST.translation]))
+      | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+      end
+    | AST {
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr(a, core:location=locAST)
+      } ->
+      case reify(a) of
+      | right(e) ->
+        just(
+          mkStrFunctionInvocation(
+            givenLocation,
+            "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst",
+            [e, locAST.translation]))
+      | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+      end
+    | AST {
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr(qualifiersAST, a, locAST)
+      } ->
+      case reify(a) of
+      | right(e) ->
+        just(
+          mkStrFunctionInvocation(
+            givenLocation, "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
+            [mkStrFunctionInvocation(
+               givenLocation,
+               "edu:umn:cs:melt:ableC:abstractsyntax:host:addQualifiers",
+               [access(
+                  qualifiersAST.translation, '.',
+                  qNameAttrOccur(
+                    makeQName("qualifiers", givenLocation), location=givenLocation),
+                  location=givenLocation),
+                e])]))
+      | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
+      end
+    | _ ->
+      if
+        containsBy(
+          stringEq, prodName,
+          ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr",
+           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr",
+           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr"])
+      then error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
+      else nothing()
     end;
 }
