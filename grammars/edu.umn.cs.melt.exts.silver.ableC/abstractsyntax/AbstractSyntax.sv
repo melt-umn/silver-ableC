@@ -7,47 +7,50 @@ imports silver:definition:core;
 
 imports edu:umn:cs:melt:ableC:abstractsyntax:host as ableC;
 
+global resultFile::String = "../../results.txt";
+
 -- Silver-to-ableC bridge productions
 abstract production ableCDeclsLiteral
 top::Expr ::= ast::ableC:Decls
 {
   top.unparse = s"ableC_Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
-  forwards to translate(top.location, reflect(new(ast)));
+  forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(explode("\n", srcPP(top.location, reflect(new(ast))))) - length(explode("\n", top.unparse))) ++ "\n", unsafeIO()));
+  --forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(srcPP(top.location, reflect(new(ast)))) - length(top.unparse)) ++ "\n", unsafeIO()));
 }
 
 abstract production ableCDeclLiteral
 top::Expr ::= ast::ableC:Decl
 {
   top.unparse = s"ableC_Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to translate(top.location, reflect(new(ast)));
+  forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(explode("\n", srcPP(top.location, reflect(new(ast))))) - length(explode("\n", top.unparse))) ++ "\n", unsafeIO()));
 }
 
 abstract production ableCParametersLiteral
 top::Expr ::= ast::ableC:Parameters
 {
   top.unparse = s"ableC_Parameters {${sconcat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
-  forwards to translate(top.location, reflect(new(ast)));
+  forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(explode("\n", srcPP(top.location, reflect(new(ast))))) - length(explode("\n", top.unparse))) ++ "\n", unsafeIO()));
 }
 
 abstract production ableCBaseTypeExprLiteral
 top::Expr ::= ast::ableC:BaseTypeExpr
 {
   top.unparse = s"ableC_BaseTypeExpr {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to translate(top.location, reflect(new(ast)));
+  forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(explode("\n", srcPP(top.location, reflect(new(ast))))) - length(explode("\n", top.unparse))) ++ "\n", unsafeIO()));
 }
 
 abstract production ableCStmtLiteral
 top::Expr ::= ast::ableC:Stmt
 {
   top.unparse = s"ableC_Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to translate(top.location, reflect(new(ast)));
+  forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(explode("\n", srcPP(top.location, reflect(new(ast))))) - length(explode("\n", top.unparse))) ++ "\n", unsafeIO()));
 }
 
 abstract production ableCExprLiteral
 top::Expr ::= ast::ableC:Expr
 {
   top.unparse = s"ableC_Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
-  forwards to translate(top.location, reflect(new(ast)));
+  forwards to unsafeTrace(translate(top.location, reflect(new(ast))), appendFile(resultFile, toString(length(explode("\n", srcPP(top.location, reflect(new(ast))))) - length(explode("\n", top.unparse))) ++ "\n", unsafeIO()));
 }
 
 -- AbleC-to-Silver bridge productions
