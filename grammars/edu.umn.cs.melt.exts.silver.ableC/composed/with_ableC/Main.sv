@@ -4,6 +4,8 @@ import silver:host;
 import silver:translation:java;
 import silver:driver;
 
+import silver:extension:treesitter;
+import silver:extension:ideinterface;
 import silver:extension:doc;
 import silver:analysis:warnings:flow;
 import silver:analysis:warnings:exporting;
