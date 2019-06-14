@@ -4,6 +4,7 @@ grammar edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 imports silver:langutil:pp;
 
 imports silver:definition:core;
+imports silver:extension:patternmatching;
 
 imports edu:umn:cs:melt:ableC:abstractsyntax:host as ableC;
 
@@ -50,6 +51,48 @@ top::Expr ::= ast::ableC:Expr
   forwards to translate(top.location, reflect(new(ast)));
 }
 
+abstract production ableCDeclsPattern
+top::Pattern ::= ast::ableC:Decls
+{
+  top.unparse = s"ableC_Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
+  forwards to translatePattern(top.location, reflect(new(ast)));
+}
+
+abstract production ableCDeclPattern
+top::Pattern ::= ast::ableC:Decl
+{
+  top.unparse = s"ableC_Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translatePattern(top.location, reflect(new(ast)));
+}
+
+abstract production ableCParametersPattern
+top::Pattern ::= ast::ableC:Parameters
+{
+  top.unparse = s"ableC_Parameters {${sconcat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
+  forwards to translatePattern(top.location, reflect(new(ast)));
+}
+
+abstract production ableCBaseTypeExprPattern
+top::Pattern ::= ast::ableC:BaseTypeExpr
+{
+  top.unparse = s"ableC_BaseTypeExpr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translatePattern(top.location, reflect(new(ast)));
+}
+
+abstract production ableCStmtPattern
+top::Pattern ::= ast::ableC:Stmt
+{
+  top.unparse = s"ableC_Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translatePattern(top.location, reflect(new(ast)));
+}
+
+abstract production ableCExprPattern
+top::Pattern ::= ast::ableC:Expr
+{
+  top.unparse = s"ableC_Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  forwards to translatePattern(top.location, reflect(new(ast)));
+}
+
 -- AbleC-to-Silver bridge productions
 abstract production escapeDecls
 top::ableC:Decl ::= e::Expr
@@ -72,6 +115,20 @@ top::ableC:Stmt ::= e::Expr
   forwards to ableC:warnStmt([]);
 }
 
+abstract production varStmt
+top::ableC:Stmt ::= n::String
+{
+  top.pp = pp"$$Stmt ${text(n)}";
+  forwards to ableC:warnStmt([]);
+}
+
+abstract production wildStmt
+top::ableC:Stmt ::=
+{
+  top.pp = pp"$$Stmt _";
+  forwards to ableC:warnStmt([]);
+}
+
 abstract production escapeInitializer
 top::ableC:Initializer ::= e::Expr
 {
@@ -90,6 +147,20 @@ abstract production escapeExpr
 top::ableC:Expr ::= e::Expr
 {
   top.pp = pp"$$Expr{${text(e.unparse)}}";
+  forwards to ableC:errorExpr([], location=builtin);
+}
+
+abstract production varExpr
+top::ableC:Expr ::= n::String
+{
+  top.pp = pp"$$Expr ${text(n)}";
+  forwards to ableC:errorExpr([], location=builtin);
+}
+
+abstract production wildExpr
+top::ableC:Expr ::=
+{
+  top.pp = pp"$$Expr _";
   forwards to ableC:errorExpr([], location=builtin);
 }
 
@@ -191,6 +262,20 @@ abstract production escapeBaseTypeExpr
 top::ableC:BaseTypeExpr ::= e::Expr
 {
   top.pp = pp"$$BaseTypeExpr{${text(e.unparse)}}";
+  forwards to ableC:errorTypeExpr([]);
+}
+
+abstract production varBaseTypeExpr
+top::ableC:BaseTypeExpr ::= n::String
+{
+  top.pp = pp"$$BaseTypeExpr ${text(n)}";
+  forwards to ableC:errorTypeExpr([]);
+}
+
+abstract production wildBaseTypeExpr
+top::ableC:BaseTypeExpr ::=
+{
+  top.pp = pp"$$BaseTypeExpr _";
   forwards to ableC:errorTypeExpr([]);
 }
 
