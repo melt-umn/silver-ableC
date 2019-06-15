@@ -23,6 +23,20 @@ top::Expr ::= ast::ableC:Decl
   forwards to translate(top.location, reflect(new(ast)));
 }
 
+abstract production varDecl
+top::ableC:Decl ::= n::Name
+{
+  top.pp = pp"$$Decl ${text(n.unparse)}";
+  forwards to ableC:warnDecl([]);
+}
+
+abstract production wildDecl
+top::ableC:Decl ::=
+{
+  top.pp = pp"$$Decl _";
+  forwards to ableC:warnDecl([]);
+}
+
 abstract production ableCParametersLiteral
 top::Expr ::= ast::ableC:Parameters
 {
@@ -116,9 +130,9 @@ top::ableC:Stmt ::= e::Expr
 }
 
 abstract production varStmt
-top::ableC:Stmt ::= n::String
+top::ableC:Stmt ::= n::Name
 {
-  top.pp = pp"$$Stmt ${text(n)}";
+  top.pp = pp"$$Stmt ${text(n.unparse)}";
   forwards to ableC:warnStmt([]);
 }
 
@@ -151,9 +165,9 @@ top::ableC:Expr ::= e::Expr
 }
 
 abstract production varExpr
-top::ableC:Expr ::= n::String
+top::ableC:Expr ::= n::Name
 {
-  top.pp = pp"$$Expr ${text(n)}";
+  top.pp = pp"$$Expr ${text(n.unparse)}";
   forwards to ableC:errorExpr([], location=builtin);
 }
 
@@ -185,11 +199,24 @@ top::ableC:Name ::= e::Expr
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
-
 abstract production escapeName
 top::ableC:Name ::= e::Expr
 {
   top.pp = pp"$$Name{${text(e.unparse)}}";
+  forwards to ableC:name("<unknown>", location=builtin);
+}
+
+abstract production varName
+top::ableC:Name ::= n::Name
+{
+  top.pp = pp"$$Name ${text(n.unparse)}";
+  forwards to ableC:name("<unknown>", location=builtin);
+}
+
+abstract production wildName
+top::ableC:Name ::=
+{
+  top.pp = pp"$$Name _";
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
@@ -266,9 +293,9 @@ top::ableC:BaseTypeExpr ::= e::Expr
 }
 
 abstract production varBaseTypeExpr
-top::ableC:BaseTypeExpr ::= n::String
+top::ableC:BaseTypeExpr ::= n::Name
 {
-  top.pp = pp"$$BaseTypeExpr ${text(n)}";
+  top.pp = pp"$$BaseTypeExpr ${text(n.unparse)}";
   forwards to ableC:errorTypeExpr([]);
 }
 

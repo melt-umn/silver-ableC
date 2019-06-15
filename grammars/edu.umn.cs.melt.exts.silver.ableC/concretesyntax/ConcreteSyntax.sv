@@ -59,11 +59,15 @@ concrete productions top::Declaration_c
   { top.ast = escapeDecls(e); }
 | '$Decl' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeDecl(e); }
+| '$Decl' n::Name
+  { top.ast = varDecl(n); }
+| '$Decl' '_'
+  { top.ast = wildDecl(); }
 concrete productions top::Stmt_c
 | '$Stmt' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeStmt(e); }
-| '$Stmt' n::Identifier_t
-  { top.ast = varStmt(n.lexeme); }
+| '$Stmt' n::Name
+  { top.ast = varStmt(n); }
 | '$Stmt' '_'
   { top.ast = wildStmt(); }
 concrete productions top::Initializer_c
@@ -74,8 +78,8 @@ concrete productions top::PrimaryExpr_c
   { top.ast = escapeExprs(e, location=top.location); }
 | '$Expr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeExpr(e, location=top.location); }
-| '$Expr' n::Identifier_t
-  { top.ast = varExpr(n.lexeme, location=top.location); }
+| '$Expr' n::Name
+  { top.ast = varExpr(n, location=top.location); }
 | '$Expr' '_'
   { top.ast = wildExpr(location=top.location); }
 | '$intLiteralExpr' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
@@ -87,6 +91,10 @@ concrete productions top::Identifier_c
   { top.ast = escapeNames(e, location=top.location); }
 | '$Name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escapeName(e, location=top.location); }
+| '$Name' n::Name
+  { top.ast = varName(n, location=top.location); }
+| '$Name' '_'
+  { top.ast = wildName(location=top.location); }
 | '$name' NotInAbleC silver:definition:core:LCurly_t e::Expr silver:definition:core:RCurly_t InAbleC
   { top.ast = escape_name(e, location=top.location); }
 concrete productions top::TypeIdName_c
@@ -124,9 +132,9 @@ concrete productions top::TypeSpecifier_c
     top.realTypeSpecifiers = [escapeBaseTypeExpr(e)];
     top.preTypeSpecifiers = [];
   }
-| '$BaseTypeExpr' n::Identifier_t
+| '$BaseTypeExpr' n::Name
   { -- TODO: Discarding qualifiers here!
-    top.realTypeSpecifiers = [varBaseTypeExpr(n.lexeme)];
+    top.realTypeSpecifiers = [varBaseTypeExpr(n)];
     top.preTypeSpecifiers = [];
   }
 | '$BaseTypeExpr' '_'

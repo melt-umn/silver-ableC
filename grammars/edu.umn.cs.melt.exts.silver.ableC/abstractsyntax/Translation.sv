@@ -70,10 +70,14 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
   
   varPatternProductions <-
     ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:varExpr",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:varName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:varDecl",
      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:varStmt",
      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:varBaseTypeExpr"];
   wildPatternProductions <-
     ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildExpr",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildDecl",
      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildStmt",
      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildBaseTypeExpr"];
   
