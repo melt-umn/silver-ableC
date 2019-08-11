@@ -41,6 +41,12 @@ parser attribute inAbleC::Boolean action { inAbleC = false; };
 terminal InAbleC '' action { inAbleC = true; };
 terminal NotInAbleC '' action { inAbleC = false; };
 
+terminal Wild_t '_';
+
+disambiguate Wild_t, Identifier_t {
+  pluck Wild_t;
+}
+
 disambiguate NewLine_t, RegexChar_t, silver:definition:core:WhiteSpace
 {
   pluck if inAbleC then NewLine_t else WhiteSpace;
