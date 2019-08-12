@@ -48,7 +48,6 @@ melt.trynode('silver-ableC') {
       "ableC-constructor",
       "ableC-algebraic-data-types",
       "ableC-template-algebraic-data-types",
-      "ableC-halide",
     ]
     for (ext in ext_dependencies) {
       ablec.checkoutExtension(ext)
@@ -131,6 +130,7 @@ melt.trynode('silver-ableC') {
       "ableC-nondeterministic-search", "ableC-nondeterministic-search-benchmarks",
       "ableC-algebraic-data-types", "ableC-template-algebraic-data-types",
       "ableC-unification", "ableC-prolog", "ableC-rewriting",
+      "ableC-halide",
       "ableC-sample-projects",
     ]
 
