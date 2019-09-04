@@ -7,62 +7,62 @@ imports core:monad;
 aspect production nonterminalAST
 top::AST ::= prodName::String children::ASTs annotations::NamedASTs
 {
-  directEscapeProductions <-
-    ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStmt",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecl",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeInitializer",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExpr",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeName",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTName",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeName",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeBaseTypeExpr",
-     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeAttrib"];
+  directAntiquoteProductions <-
+    ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStmt",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDecl",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteInitializer",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteExpr",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteTName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteTypeName",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteBaseTypeExpr",
+     "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteAttrib"];
   
-  collectionEscapeProductions <-
+  collectionAntiquoteProductions <-
     [pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDecls",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDecls",
        pair("Decls",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consDecl",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendDecls"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeExprs",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteExprs",
        pair("Exprs",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consExpr",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendExprs"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeNames",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteNames",
        pair("Names",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consName",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendNames"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeTypeNames",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteTypeNames",
        pair("TypeNames",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consTypeName",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendTypeNames"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStorageClasses",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStorageClasses",
        pair("StorageClasses",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consStorageClass",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStorageClasses"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeParameters",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteParameters",
        pair("Parameters",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consParameters",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendParameters"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStructItemList",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStructItemList",
        pair("StructItemList",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consStructItem",
            "edu:umn:cs:melt:ableC:abstractsyntax:host:appendStructItemList"))),
      pair(
-      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeEnumItemList",
+      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteEnumItemList",
        pair("EnumItemList",
          pair(
            "edu:umn:cs:melt:ableC:abstractsyntax:host:consEnumItem",
@@ -81,15 +81,15 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildStmt",
      "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:wildBaseTypeExpr"];
   
-  -- "Indirect" escape productions
-  escapeTranslation <-
+  -- "Indirect" antiquote productions
+  antiquoteTranslation <-
     if
       -- These 2 are split out seperate to avoid duplicating code, because they
       -- are handled in the same way.
       containsBy(
         stringEq, prodName,
-        ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escape_name",
-         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escape_tname"])
+        ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_name",
+         "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_tname"])
     then
       case children, annotations of
       | consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
@@ -105,11 +105,11 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
                 [pair("location", locAST.translation)]))
           | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
           end
-      | _, _ -> error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
+      | _, _ -> error(s"Unexpected antiquote production arguments: ${show(80, top.pp)}")
       end
     else case top of
     | AST {
-       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr(a, core:location=locAST)
+       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr(a, core:location=locAST)
       } ->
       case reify(a) of
       | right(e) ->
@@ -121,7 +121,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
-        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr(a, core:location=locAST)
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr(a, core:location=locAST)
       } ->
       case reify(a) of
       | right(e) ->
@@ -133,7 +133,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
-        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr(qualifiersAST, a, locAST)
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr(qualifiersAST, a, locAST)
       } ->
       case reify(a) of
       | right(e) ->
@@ -155,10 +155,10 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       if
         containsBy(
           stringEq, prodName,
-          ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeIntLiteralExpr",
-           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeStringLiteralExpr",
-           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:escapeDirectTypeExpr"])
-      then error(s"Unexpected escape production arguments: ${show(80, top.pp)}")
+          ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr",
+           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr",
+           "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr"])
+      then error(s"Unexpected antiquote production arguments: ${show(80, top.pp)}")
       else nothing()
     end;
 }
