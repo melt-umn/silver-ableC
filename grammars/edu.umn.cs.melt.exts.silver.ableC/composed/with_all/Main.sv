@@ -5,7 +5,7 @@ import silver:translation:java;
 import silver:driver;
 
 import silver:extension:doc;
-import silver:analysis:warnings:defs;
+import silver:analysis:warnings:flow;
 import silver:analysis:warnings:exporting;
 
 parser svParse::Root {
@@ -24,7 +24,9 @@ parser svParse::Root {
   silver:extension:functorattrib;
   silver:extension:monad;
   silver:extension:reflection;
+  silver:extension:astconstruction;
   silver:extension:silverconstruction;
+  silver:extension:constructparser;
   
   silver:modification:let_fix;
   silver:modification:lambda_fn;
@@ -48,6 +50,12 @@ parser svParse::Root {
     over edu:umn:cs:melt:exts:ableC:refCountClosure:concretesyntax:lambdaExpr:Lambda_t;
   
   edu:umn:cs:melt:exts:ableC:templating;
+  edu:umn:cs:melt:exts:ableC:templating:silverconstruction;
+  edu:umn:cs:melt:exts:ableC:string;
+  edu:umn:cs:melt:exts:ableC:constructor;
+  edu:umn:cs:melt:exts:ableC:algebraicDataTypes;
+  edu:umn:cs:melt:exts:ableC:algebraicDataTypes:silverconstruction;
+  edu:umn:cs:melt:exts:ableC:templateAlgebraicDataTypes;
 }
 
 function main 

@@ -1,4 +1,4 @@
-grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_ableC;
+grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_base;
 
 import silver:host;
 import silver:translation:java;
@@ -41,6 +41,18 @@ parser svParse::Root {
   silver:modification:impide;
   
   edu:umn:cs:melt:exts:silver:ableC;
+  
+  edu:umn:cs:melt:exts:ableC:closure;
+  edu:umn:cs:melt:exts:ableC:refCountClosure prefix with "refcount";
+  prefer edu:umn:cs:melt:exts:ableC:closure:concretesyntax:typeExpr:Closure_t
+    over edu:umn:cs:melt:exts:ableC:refCountClosure:concretesyntax:typeExpr:Closure_t;
+  prefer edu:umn:cs:melt:exts:ableC:closure:concretesyntax:lambdaExpr:Lambda_t
+    over edu:umn:cs:melt:exts:ableC:refCountClosure:concretesyntax:lambdaExpr:Lambda_t;
+  
+  edu:umn:cs:melt:exts:ableC:templating;
+  edu:umn:cs:melt:exts:ableC:templating:silverconstruction;
+  edu:umn:cs:melt:exts:ableC:string;
+  edu:umn:cs:melt:exts:ableC:constructor;
 }
 
 function main 

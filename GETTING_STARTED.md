@@ -1,7 +1,7 @@
 # Getting Started
 
 ## Installation
-This extension depends on Silver and ableC, and so both of these repos must be cloned.  In addition, the default composed artifact also includes ableC-closure, ableC-refcount-closure, and ableC-templating, so these repositories are also needed if using the default build.  The build scripts expect silver and ableC to be cloned in a top-level workspace also including an `extensions` directory that contains silver-ableC and the ableC extensions:
+This extension depends on Silver and ableC, and so both of these repos must be cloned.  The default composed artifact additionally includes several other generally-useful ableC extensions, so these repositories are also needed if using the default build.  The build scripts expect silver and ableC to be cloned in a top-level workspace also including an `extensions` directory that contains silver-ableC and the ableC extensions:
 
     |-- silver/
     |-- ableC/
@@ -9,14 +9,19 @@ This extension depends on Silver and ableC, and so both of these repos must be c
         |-- ableC-closure/
         |-- ableC-refcount-closure/
         |-- ableC-templating/
+        |-- ableC-string/
+        |-- ableC-constructor/
+        |-- ableC-algebraic-data-types/
+        |-- ableC-template-algebraic-data-types/
         |-- silver-ableC/
 
 First ensure that Silver is installed correctly and up to date by running `./update && ./self-compile` in the `silver/` repository, and ensure that the `silver` and `silver-custom` scripts have been installed by running `./support/bin/install-silver-bin`.  
 
-To compile the default composition of silver-ableC from a fresh installation, run `./bootstrap-compile` in the `silver-ableC/` repository.  As the ableC-closure and ableC-refcount-closure both utilize the new syntax of silver-ableC, a multi-step compilation process is needed.  This script does the following steps:
+To compile the default composition of silver-ableC from a fresh installation, run `./bootstrap-compile` in the `silver-ableC/` repository.  As some default-included ableC extensions utilize the new syntax of silver-ableC and other extensions, a multi-step compilation process is needed.  This script does the following steps:
 1. Build silver + silver-ableC with "vanilla" Silver
-2. Build silver + silver-ableC + ableC extensions using the result of 1
-3. Clean build silver + silver-ableC + ableC extensions using the result of 2, to ensure nothing went wrong and the compilation result is usable
+2. Build silver + silver-ableC + basic ableC extensions using the result of 1
+3. Build silver + silver-ableC + all ableC extensions using the result of 2
+4. Clean build silver + silver-ableC + all ableC extensions using the result of 3, to ensure nothing went wrong and the compilation result is usable
 
 Once this "bootstrapped" compiler has been built, when any components are updated a fresh bootstrapped build usually isn't needed.  Instead the faster `./self-compile` script can be used, which only performs a single cycle of compilation using the existing composed compiler.  
 
