@@ -5,6 +5,7 @@ This extension depends on Silver and ableC, and so both of these repos must be c
 
     |-- silver/
     |-- ableC/
+    |-- ableC-tutorials/
     |-- extensions/
         |-- ableC-closure/
         |-- ableC-refcount-closure/

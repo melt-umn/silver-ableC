@@ -132,7 +132,7 @@ melt.trynode('silver-ableC') {
       "ableC-unification", "ableC-prolog", "ableC-rewriting",
       "ableC-halide",
       "ableC-tensor-algebra",
-      "ableC-sample-projects",
+      "ableC-tutorials", "ableC-sample-projects",
     ]
 
     def tasks = [:]
