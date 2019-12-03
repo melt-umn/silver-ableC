@@ -22,9 +22,9 @@ ableC_Stmt {
   $Stmt{s}
 }
 ```
-Such constructs are provided for the `Decls`, `Decl`, `Stmt`, `Initializer`, `Exprs`, `Expr`, `Names`, `Name`, `StorageClasses`, `Parameters`, `StructItemList`, `EnumItemList`, `TypeNames`, `TypeName`, `BaseTypeExpr`, and `Attrib` nonterminals.  In addition, the `$TName{}` escape also accepts a `Name` and may be used where a type identifier is expected (this is distinct from `$Name` due to the syntactic ambiguity present in C.)  
+Such constructs are provided for the `Decls`, `Decl`, `Stmt`, `Initializer`, `Exprs`, `Expr`, `Names`, `Name`, `StorageClasses`, `Parameters`, `StructItemList`, `EnumItemList`, `TypeNames`, `TypeName`, `BaseTypeExpr`, and `Attrib` nonterminals.  In addition, the `$TName{}` antiquote also accepts a `Name` and may be used where a type identifier is expected (this is distinct from `$Name` due to the syntactic ambiguity present in C.)  
 
-Escape productions are also provided for several "collection" nonterminals, `Exprs`, `StorageClasses`, and `Parameters` - these escapes are written as a single member of the collection, and code is generated to allow for the appropriate append operations:
+Antiquote productions are also provided for several "collection" nonterminals, `Exprs`, `StorageClasses`, and `Parameters` - these antiquotes are written as a single member of the collection, and code is generated to allow for the appropriate append operations:
 ```
 ableC_Decl {
   int foo(int a, float b, $Parameters{params}, int c, $Parameters{moreParams}) {
@@ -35,7 +35,7 @@ ableC_Decl {
 }
 ```
 
-A number of common escape idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
+A number of common antiquote idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
 
 Idiom                                                                                                 | Shorthand
 ----------------------------------------------------------------------------------------------------- | --------------------
@@ -44,6 +44,21 @@ Idiom                                                                           
 `$Name{name(n, location=...)}`                                                                        | `$name{n}`
 `$TName{name(n, location=...)}`                                                                       | `$tname{n}`
 `$BaseTypeExpr{directTypeExpr(t)}`                                                                    | `$directTypeExpr{t}`
+
+## Pattern matching
+Instead of constructing abstract syntax trees, occasionally we instead wish to deconstruct them by pattern matching, for example to perform a transformation on a particular combination of host-langauge features
+```
+case s of
+| ableC_Stmt {
+    for ($BaseTypeExpr _ $Name i1 = 0; $Name i2 < $Expr limit; $Name i3 ++) {
+      $Stmt body
+    }
+  } -> if i1.name == i2.name && i1.name == i3.name then ... else s
+| _ -> s
+end;
+```
+
+Here pattern variables and wildcards of various types may be written as antiquotes (note the lack of brackets.)  Also note that a particular pattern variable may only appear once in a pattern, which may require additional equality checking on the right side of the pattern rule.
 
 ## Typedef Prototypes
 Due to the ambiguous nature of the C grammar and the infamous "lexer hack", knowledge of whether an identifier has previously been defined as a value or a typedef is often required during parsing.  As fragments of code involved in definitions may reference types defined in header files, some method of informing the lexer of all externally defined typedefs is needed.  To do this, the syntax `proto_typedef foo, bar, baz;` may be used at the start of any ableC block.  This has no semantic meaning, and only has an effect on how identifiers are parsed.  

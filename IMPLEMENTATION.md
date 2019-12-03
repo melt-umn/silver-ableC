@@ -1,5 +1,5 @@
 # Implementation
-There are several implementation issues that must be handled for this extension
+There are several implementation issues that must be handled for this extension.  A more complete discussion may be found in our GPCE paper, [Reflection in Attribute Grammars](https://www-users.cs.umn.edu/~evw/pubs/kramer19Agpce/index.html)
 
 ## Concrete Syntax
 Due to the modular nature of Silver programs, it is possible to reuse the entire concrete syntax of ableC as an "embedded DSL" by exporting it from within the extension.  Concrete "bridge productions" from Silver to ableC are supplied, defining the various new Silver constructs for embedding ableC.  These productions demand the `ast` of the wrapped ableC concrete syntax, forwarding to abstract counterparts that perform the actual translation.  
