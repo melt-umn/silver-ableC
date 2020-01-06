@@ -13,29 +13,29 @@ marking terminal AbleCExpr_t         'ableC_Expr'         lexer classes {KEYWORD
 temp_imp_ide_font font_escape color(123, 0, 82) bold italic;
 lexer class Escape font=font_escape;
 
-terminal EscapeDecls_t             '$Decls'             lexer classes {Escape, Ckeyword};
-terminal EscapeDecl_t              '$Decl'              lexer classes {Escape, Ckeyword};
-terminal EscapeStmt_t              '$Stmt'              lexer classes {Escape, Ckeyword};
-terminal EscapeInitializer_t       '$Initializer'       lexer classes {Escape, Ckeyword};
-terminal EscapeExprs_t             '$Exprs'             lexer classes {Escape, Ckeyword};
-terminal EscapeExpr_t              '$Expr'              lexer classes {Escape, Ckeyword};
-terminal EscapeIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Escape, Ckeyword};
-terminal EscapeStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Escape, Ckeyword};
-terminal EscapeNames_t             '$Names'             lexer classes {Escape, Ckeyword};
-terminal EscapeName_t              '$Name'              lexer classes {Escape, Ckeyword};
-terminal EscapeTName_t             '$TName'             lexer classes {Escape, Ckeyword};
-terminal Escape_name_t             '$name'              lexer classes {Escape, Ckeyword};
-terminal Escape_tname_t            '$tname'             lexer classes {Escape, Ckeyword};
-terminal EscapeStorageClasses      '$StorageClasses'    lexer classes {Escape, Ckeyword};
-terminal EscapeParameters_t        '$Parameters'        lexer classes {Escape, Ckeyword};
-terminal EscapeStructItemList_t    '$StructItemList'    lexer classes {Escape, Ckeyword};
-terminal EscapeEnumItemList_t      '$EnumItemList'      lexer classes {Escape, Ckeyword};
-terminal EscapeTypeNames_t         '$TypeNames'         lexer classes {Escape, Ckeyword};
-terminal EscapeTypeName_t          '$TypeName'          lexer classes {Escape, Ckeyword};
-terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Escape, Ckeyword};
---terminal EscapeTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {Escape, Ckeyword};
-terminal EscapeType_t              '$directTypeExpr'    lexer classes {Escape, Ckeyword};
-terminal EscapeAttrib_t            '$Attrib'            lexer classes {Escape, Ckeyword}, dominates {AttributeNameUnfetterdByKeywords_t};
+terminal EscapeDecls_t             '$Decls'             lexer classes {Escape, Reserved};
+terminal EscapeDecl_t              '$Decl'              lexer classes {Escape, Reserved};
+terminal EscapeStmt_t              '$Stmt'              lexer classes {Escape, Reserved};
+terminal EscapeInitializer_t       '$Initializer'       lexer classes {Escape, Reserved};
+terminal EscapeExprs_t             '$Exprs'             lexer classes {Escape, Reserved};
+terminal EscapeExpr_t              '$Expr'              lexer classes {Escape, Reserved};
+terminal EscapeIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Escape, Reserved};
+terminal EscapeStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Escape, Reserved};
+terminal EscapeNames_t             '$Names'             lexer classes {Escape, Reserved};
+terminal EscapeName_t              '$Name'              lexer classes {Escape, Reserved};
+terminal EscapeTName_t             '$TName'             lexer classes {Escape, Reserved};
+terminal Escape_name_t             '$name'              lexer classes {Escape, Reserved};
+terminal Escape_tname_t            '$tname'             lexer classes {Escape, Reserved};
+terminal EscapeStorageClasses      '$StorageClasses'    lexer classes {Escape, Reserved};
+terminal EscapeParameters_t        '$Parameters'        lexer classes {Escape, Reserved};
+terminal EscapeStructItemList_t    '$StructItemList'    lexer classes {Escape, Reserved};
+terminal EscapeEnumItemList_t      '$EnumItemList'      lexer classes {Escape, Reserved};
+terminal EscapeTypeNames_t         '$TypeNames'         lexer classes {Escape, Reserved};
+terminal EscapeTypeName_t          '$TypeName'          lexer classes {Escape, Reserved};
+terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Escape, Reserved};
+--terminal EscapeTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {Escape, Reserved};
+terminal EscapeType_t              '$directTypeExpr'    lexer classes {Escape, Reserved};
+terminal EscapeAttrib_t            '$Attrib'            lexer classes {Escape, Reserved}, dominates {AttributeNameUnfetterdByKeywords_t};
 -- Workarounds for weirdness with ignore terminals
 parser attribute inAbleC::Boolean action { inAbleC = false; };
 terminal InAbleC '' action { inAbleC = true; };
@@ -79,7 +79,7 @@ disambiguate Spaces_t, silver:definition:core:WhiteSpace, silver:reflect:concret
 {
   pluck if inAbleC then Spaces_t else WhiteSpace;
 }
-disambiguate DEC_OP, Comments
+disambiguate Dec_t, Comments
 {
-  pluck if inAbleC then DEC_OP else Comments;
+  pluck if inAbleC then Dec_t else Comments;
 }
