@@ -36,50 +36,9 @@ terminal EscapeBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Escape, R
 --terminal EscapeTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {Escape, Reserved};
 terminal EscapeType_t              '$directTypeExpr'    lexer classes {Escape, Reserved};
 terminal EscapeAttrib_t            '$Attrib'            lexer classes {Escape, Reserved}, dominates {AttributeNameUnfetterdByKeywords_t};
--- Workarounds for weirdness with ignore terminals
-parser attribute inAbleC::Boolean action { inAbleC = false; };
-terminal InAbleC '' action { inAbleC = true; };
-terminal NotInAbleC '' action { inAbleC = false; };
 
 terminal Wild_t '_';
 
 disambiguate Wild_t, Identifier_t {
   pluck Wild_t;
-}
-
-disambiguate NewLine_t, RegexChar_t, silver:definition:core:WhiteSpace
-{
-  pluck if inAbleC then NewLine_t else WhiteSpace;
-}
-disambiguate NewLine_t, silver:definition:core:WhiteSpace
-{
-  pluck if inAbleC then NewLine_t else silver:definition:core:WhiteSpace;
-}
-disambiguate Spaces_t, RegexChar_t, silver:definition:core:WhiteSpace
-{
-  pluck if inAbleC then Spaces_t else WhiteSpace;
-}
-disambiguate Spaces_t, silver:definition:core:WhiteSpace
-{
-  pluck if inAbleC then Spaces_t else WhiteSpace;
-}
-disambiguate NewLine_t, RegexChar_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
-{
-  pluck if inAbleC then NewLine_t else WhiteSpace;
-}
-disambiguate NewLine_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
-{
-  pluck if inAbleC then NewLine_t else WhiteSpace;
-}
-disambiguate Spaces_t, RegexChar_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
-{
-  pluck if inAbleC then Spaces_t else WhiteSpace;
-}
-disambiguate Spaces_t, silver:definition:core:WhiteSpace, silver:reflect:concretesyntax:WhiteSpace
-{
-  pluck if inAbleC then Spaces_t else WhiteSpace;
-}
-disambiguate Dec_t, Comments
-{
-  pluck if inAbleC then Dec_t else Comments;
 }
