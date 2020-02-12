@@ -1,6 +1,5 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax;
 
-imports silver:definition:regex;
 imports silver:reflect:concretesyntax;
 
 marking terminal AbleCDecls_t        'ableC_Decls'        lexer classes {KEYWORD, RESERVED};
