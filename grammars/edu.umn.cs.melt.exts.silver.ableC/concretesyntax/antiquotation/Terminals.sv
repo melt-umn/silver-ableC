@@ -1,34 +1,50 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
 
+imports edu:umn:cs:melt:exts:silver:ableC:concretesyntax:quotation;
+
 temp_imp_ide_font font_antiquote color(123, 0, 82) bold italic;
-lexer class Antiquote font=font_antiquote;
+lexer class Antiquote
+  disambiguate {
+    -- Ambiguities between antiquote terminals should consist of 1 expression
+    -- and 1 pattern antiquote terminal.
+    if (inPattern)
+      -- Pick the pattern antiquote terminal
+      pluck head(intersectBy(terminalIdEq, shiftable, PatternAntiquote));
+    else
+      -- Pick the expression antiquote terminal
+      pluck head(intersectBy(terminalIdEq, shiftable, ExprAntiquote));
+  },
+  font=font_antiquote;
 
-marking terminal AntiquoteDecls_t             '$Decls'             lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteDecl_t              '$Decl'              lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteStmt_t              '$Stmt'              lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteInitializer_t       '$Initializer'       lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteExprs_t             '$Exprs'             lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteExpr_t              '$Expr'              lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteStringLiteralExpr_t '$stringLiteralExpr' lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteNames_t             '$Names'             lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteName_t              '$Name'              lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteTName_t             '$TName'             lexer classes {Antiquote, Reserved};
-marking terminal Antiquote_name_t             '$name'              lexer classes {Antiquote, Reserved};
-marking terminal Antiquote_tname_t            '$tname'             lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteStorageClasses      '$StorageClasses'    lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteParameters_t        '$Parameters'        lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteStructItemList_t    '$StructItemList'    lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteEnumItemList_t      '$EnumItemList'      lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteTypeNames_t         '$TypeNames'         lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteTypeName_t          '$TypeName'          lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {Antiquote, Reserved};
---marking terminal AntiquoteTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteType_t              '$directTypeExpr'    lexer classes {Antiquote, Reserved};
-marking terminal AntiquoteAttrib_t            '$Attrib'            lexer classes {Antiquote, Reserved}, dominates {AttributeNameUnfetterdByKeywords_t};
+lexer class ExprAntiquote extends Antiquote;
+lexer class PatternAntiquote extends Antiquote;
 
-terminal Wild_t '_';
+marking terminal AntiquoteDecls_t             '$Decls'             lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteDecl_t              '$Decl'              lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteStmt_t              '$Stmt'              lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteInitializer_t       '$Initializer'       lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteExprs_t             '$Exprs'             lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteExpr_t              '$Expr'              lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteIntLiteralExpr_t    '$intLiteralExpr'    lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteStringLiteralExpr_t '$stringLiteralExpr' lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteNames_t             '$Names'             lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteName_t              '$Name'              lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteTName_t             '$TName'             lexer classes {ExprAntiquote, Reserved};
+marking terminal Antiquote_name_t             '$name'              lexer classes {ExprAntiquote, Reserved};
+marking terminal Antiquote_tname_t            '$tname'             lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteStorageClasses      '$StorageClasses'    lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteParameters_t        '$Parameters'        lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteStructItemList_t    '$StructItemList'    lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteEnumItemList_t      '$EnumItemList'      lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteTypeNames_t         '$TypeNames'         lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteTypeName_t          '$TypeName'          lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteBaseTypeExpr_t      '$BaseTypeExpr'      lexer classes {ExprAntiquote, Reserved};
+--marking terminal AntiquoteTypeModifierExpr_t  '$TypeModifierExpr'  lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteType_t              '$directTypeExpr'    lexer classes {ExprAntiquote, Reserved};
+marking terminal AntiquoteAttrib_t            '$Attrib'            lexer classes {ExprAntiquote, Reserved}, dominates {AttributeNameUnfetterdByKeywords_t};
 
-disambiguate Wild_t, Identifier_t {
-  pluck Wild_t;
-}
+marking terminal AntiquoteDeclPattern_t         '$Decl'            lexer classes {PatternAntiquote, Reserved};
+marking terminal AntiquoteStmtPattern_t         '$Stmt'            lexer classes {PatternAntiquote, Reserved};
+marking terminal AntiquoteExprPattern_t         '$Expr'            lexer classes {PatternAntiquote, Reserved};
+marking terminal AntiquoteNamePattern_t         '$Name'            lexer classes {PatternAntiquote, Reserved};
+marking terminal AntiquoteBaseTypeExprPattern_t '$BaseTypeExpr'    lexer classes {PatternAntiquote, Reserved};
