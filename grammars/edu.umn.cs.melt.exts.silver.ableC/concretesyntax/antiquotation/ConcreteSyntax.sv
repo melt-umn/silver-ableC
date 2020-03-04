@@ -3,7 +3,8 @@ grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
 imports silver:definition:core;
 imports silver:extension:patternmatching;
 imports edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
-imports edu:umn:cs:melt:ableC:concretesyntax hiding LCurly_t, RCurly_t;
+imports edu:umn:cs:melt:ableC:concretesyntax
+  hiding LCurly_t, RCurly_t; -- We only use the ones from Silver, makes '{' terminal syntax unambigous
 
 -- AbleC-to-Silver bridge productions
 concrete productions top::Declaration_c

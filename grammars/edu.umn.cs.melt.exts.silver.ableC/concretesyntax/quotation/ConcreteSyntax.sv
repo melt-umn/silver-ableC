@@ -1,6 +1,7 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:quotation;
 
-imports silver:definition:core hiding LCurly_t, RCurly_t;
+imports silver:definition:core
+  hiding LCurly_t, RCurly_t; -- We only use the ones from ableC, makes '{' terminal syntax unambigous
 imports silver:extension:patternmatching;
 imports edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 imports edu:umn:cs:melt:ableC:abstractsyntax:construction;
