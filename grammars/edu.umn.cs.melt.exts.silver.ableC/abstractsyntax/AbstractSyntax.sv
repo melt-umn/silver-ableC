@@ -108,17 +108,10 @@ top::ableC:Decl ::= e::Expr
   forwards to ableC:warnDecl([]);
 }
 
-abstract production varDecl
-top::ableC:Decl ::= n::Name
+abstract production antiquotePatternDecl
+top::ableC:Decl ::= p::Pattern
 {
-  top.pp = pp"$$Decl ${text(n.unparse)}";
-  forwards to ableC:warnDecl([]);
-}
-
-abstract production wildDecl
-top::ableC:Decl ::=
-{
-  top.pp = pp"$$Decl _";
+  top.pp = pp"$$Decl{${text(p.unparse)}}";
   forwards to ableC:warnDecl([]);
 }
 
@@ -129,17 +122,10 @@ top::ableC:Stmt ::= e::Expr
   forwards to ableC:warnStmt([]);
 }
 
-abstract production varStmt
-top::ableC:Stmt ::= n::Name
+abstract production antiquotePatternStmt
+top::ableC:Stmt ::= p::Pattern
 {
-  top.pp = pp"$$Stmt ${text(n.unparse)}";
-  forwards to ableC:warnStmt([]);
-}
-
-abstract production wildStmt
-top::ableC:Stmt ::=
-{
-  top.pp = pp"$$Stmt _";
+  top.pp = pp"$$Stmt{${text(p.unparse)}}";
   forwards to ableC:warnStmt([]);
 }
 
@@ -164,17 +150,10 @@ top::ableC:Expr ::= e::Expr
   forwards to ableC:errorExpr([], location=builtin);
 }
 
-abstract production varExpr
-top::ableC:Expr ::= n::Name
+abstract production antiquotePatternExpr
+top::ableC:Expr ::= p::Pattern
 {
-  top.pp = pp"$$Expr ${text(n.unparse)}";
-  forwards to ableC:errorExpr([], location=builtin);
-}
-
-abstract production wildExpr
-top::ableC:Expr ::=
-{
-  top.pp = pp"$$Expr _";
+  top.pp = pp"$$Expr{${text(p.unparse)}}";
   forwards to ableC:errorExpr([], location=builtin);
 }
 
@@ -206,17 +185,10 @@ top::ableC:Name ::= e::Expr
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
-abstract production varName
-top::ableC:Name ::= n::Name
+abstract production antiquotePatternName
+top::ableC:Name ::= p::Pattern
 {
-  top.pp = pp"$$Name ${text(n.unparse)}";
-  forwards to ableC:name("<unknown>", location=builtin);
-}
-
-abstract production wildName
-top::ableC:Name ::=
-{
-  top.pp = pp"$$Name _";
+  top.pp = pp"$$Name{${text(p.unparse)}}";
   forwards to ableC:name("<unknown>", location=builtin);
 }
 
@@ -292,17 +264,10 @@ top::ableC:BaseTypeExpr ::= e::Expr
   forwards to ableC:errorTypeExpr([]);
 }
 
-abstract production varBaseTypeExpr
-top::ableC:BaseTypeExpr ::= n::Name
+abstract production antiquotePatternBaseTypeExpr
+top::ableC:BaseTypeExpr ::= p::Pattern
 {
-  top.pp = pp"$$BaseTypeExpr ${text(n.unparse)}";
-  forwards to ableC:errorTypeExpr([]);
-}
-
-abstract production wildBaseTypeExpr
-top::ableC:BaseTypeExpr ::=
-{
-  top.pp = pp"$$BaseTypeExpr _";
+  top.pp = pp"$$BaseTypeExpr{${text(p.unparse)}}";
   forwards to ableC:errorTypeExpr([]);
 }
 

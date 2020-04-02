@@ -131,7 +131,9 @@ melt.trynode('silver-ableC') {
       "ableC-algebraic-data-types", "ableC-template-algebraic-data-types",
       "ableC-unification", "ableC-prolog", "ableC-rewriting",
       "ableC-halide",
-      "ableC-sample-projects",
+      "ableC-tensor-algebra",
+      "ableC-cilk",
+      "ableC-tutorials", "ableC-sample-projects",
     ]
 
     def tasks = [:]
