@@ -1,5 +1,10 @@
-# silver-ableC
-This extension to Silver allows for ableC extension writers to express complex ASTs by writing C code directly, instead of manually writing complex expressions.  For example, the new Silver expression
+# The ableC extension to Silver: silver-ableC
+
+This extension to Silver allows ableC extension writers to express
+complex ASTs by writing C code directly using its concrete syntax,
+instead of manually writing complex expressions over its abstract
+syntax.  For example, the new Silver expression
+
 ```
 ableC_Stmt {
   int a = 1;
@@ -11,63 +16,34 @@ is equivalent to writing
 ```
 seqStmt(declStmt(variableDecls(...)), seqStmt(declStmt(variableDecls(...)), returnStmt(addExpr(...))))
 ```
-except that the locations in the resulting AST correspond to the location of the constructs within the Silver source file.  These "bridge productions" from Silver to ableC syntax are provided for the nonterminals `Decls`, `Decl`, `Parameters`, `BaseTypeExpr`,`Stmt`, and `Expr`.  
 
-It is frequently the case that we may wish to construct a complex AST, with some portions that are non-constant; for example, in defining the forward of an ableC extension production, the children of the production will likely need to be "plugged in" at some point in a more complex translation.  To remedy this, we introduce bridge productions from ableC back to Silver syntax, for example
-```
-ableC_Stmt {
-  $BaseTypeExpr{...} a = $Initializer{e1};
-  int b = $Expr{e2};
-  int c = sizeof(a) + b;
-  $Stmt{s}
-}
-```
-Such constructs are provided for the `Decls`, `Decl`, `Stmt`, `Initializer`, `Exprs`, `Expr`, `Names`, `Name`, `StorageClasses`, `Parameters`, `StructItemList`, `EnumItemList`, `TypeNames`, `TypeName`, `BaseTypeExpr`, and `Attrib` nonterminals.  In addition, the `$TName{}` antiquote also accepts a `Name` and may be used where a type identifier is expected (this is distinct from `$Name` due to the syntactic ambiguity present in C.)  
+This saves a tremendous amount to time for extension developers and
+signficantly lowers the bar to entry into these efforts.
 
-Antiquote productions are also provided for several "collection" nonterminals, `Exprs`, `StorageClasses`, and `Parameters` - these antiquotes are written as a single member of the collection, and code is generated to allow for the appropriate append operations:
-```
-ableC_Decl {
-  int foo(int a, float b, $Parameters{params}, int c, $Parameters{moreParams}) {
-    ...
-    int res = foo(1, 2, $Exprs{args}, 3, ${moreArgs});
-    ...
-  }
-}
-```
+## Authors
+- Lucas Kramer, University of Minnesota, krame505@umn.edu
+- Eric Van Wyk, University of Minnesota, evw@umn.edu,
+  ORCID: https://orcid.org/0000-0002-5611-8687
 
-A number of common antiquote idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
+## Releases
+- Release 0.1.0: made in April, 2020
 
-Idiom                                                                                                 | Shorthand
------------------------------------------------------------------------------------------------------ | --------------------
-`$Expr{realConstant(integerConstant(toString(i), false, noIntSuffix(), location=...), location=...)}` | `$intLiteralExpr{i}`
-`$Expr{stringLiteral("\"" ++ escapeString(s) ++ "\"", location=...)}`                                 | `$stringLiteralExpr{s}`
-`$Name{name(n, location=...)}`                                                                        | `$name{n}`
-`$TName{name(n, location=...)}`                                                                       | `$tname{n}`
-`$BaseTypeExpr{directTypeExpr(t)}`                                                                    | `$directTypeExpr{t}`
+## Related publications
 
-## Pattern matching
-Instead of constructing abstract syntax trees, occasionally we instead wish to deconstruct them by pattern matching, for example to perform a transformation on a particular combination of host-langauge features
-```
-case s of
-| ableC_Stmt {
-    for ($BaseTypeExpr _ $Name i1 = 0; $Name i2 < $Expr limit; $Name i3 ++) {
-      $Stmt body
-    }
-  } -> if i1.name == i2.name && i1.name == i3.name then ... else s
-| _ -> s
-end;
-```
+Release 0.1.0 is discussed in the paper "Reflection of Terms in
+Attribute Grammars: Design and Applications" by Lucas Kramer, Ted
+Kaminski, and Eric Van Wyk.  At the time of release this paper has
+been submitted to the Journal of Computer Languages (COLA).
 
-Here pattern variables and wildcards of various types may be written as antiquotes (note the lack of brackets.)  Also note that a particular pattern variable may only appear once in a pattern, which may require additional equality checking on the right side of the pattern rule.
+It is an extension of ``Reflection in Attribute Grammars'' by the same
+authors, presented at the 2019 ACM SIGPLAN
+International Conference on Generative Programming: Concepts &
+Experiences (GPCE).  See DOI https://doi.org/10.1145/3357765.3359517.
 
-## Typedef Prototypes
-Due to the ambiguous nature of the C grammar and the infamous "lexer hack", knowledge of whether an identifier has previously been defined as a value or a typedef is often required during parsing.  As fragments of code involved in definitions may reference types defined in header files, some method of informing the lexer of all externally defined typedefs is needed.  To do this, the syntax `proto_typedef foo, bar, baz;` may be used at the start of any ableC block.  This has no semantic meaning, and only has an effect on how identifiers are parsed.  
-
-## Additional Extensions
-When building an extension on other ableC extensions, it is useful to use their syntax in a similar way when constructing ASTs.  This can be done simply by including ableC extensions in the parser along side silver and silver-ableC.  The default composed version of Silver built by this repository contains several commonly useful extensions: ableC-closure, ableC-refcount-closure (transparent prefix `refcount`), and ableC-templating.  However, it is possible to write a custom artifact for Silver to build silver-ableC with a different set of extensions.  
 
 ## More Information
 More documentation:
+* [Quick guide to silver-ableC](Quick_Guide.md)
 * [Getting started with using the extension](GETTING_STARTED.md)
 * [How it works](IMPLEMENTATION.md)
 
@@ -76,3 +52,30 @@ Some ableC extensions using this extension:
 * [ableC-vector](https://github.com/melt-umn/ableC-vector)
 * [ableC-nondeterministic-search](https://github.com/melt-umn/ableC-nondeterministic-search)
 * [ableC-algebraic-data-types](https://github.com/melt-umn/ableC-algebraic-data-types)
+
+## Websites and repositories
+
+Software downloads, documentation, and related papers are available on the
+Melt group web site at http://melt.cs.umn.edu/.
+
+Actively-developed versions of this software are available on GitHub at
+https://github.com/melt-umn/silver-ableC.
+
+Archival versions of this software are permanently available on the Data
+Repository of the University of Minnesota at https://doi.org/10.13020/D6QX07.
+
+Other software and artifacts are also archived there and can be
+reached from this persistent link: http://hdl.handle.net/11299/206558.
+
+
+## Acknowledgements
+We are very grateful to the National Science Foundation, the McKnight
+Foundation, DARPA, the University of Minnesota, and IBM for funding
+different aspects of our research and the development of Silver and
+Copper.
+
+
+## Licensing 
+Silver-ableC is distributed under the GNU Lesser General Public
+License.  See the file LICENSE for details of this licenses.  More
+information can be found at http://www.gnu.org/licenses/.
