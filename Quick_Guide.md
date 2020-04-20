@@ -52,18 +52,20 @@ Instead of constructing abstract syntax trees, occasionally we instead wish to d
 ```
 case s of
 | ableC_Stmt {
-    for ($BaseTypeExpr _ $Name i1 = 0; $Name i2 < $Expr limit; $Name i3 ++) {
-      $Stmt body
+    for ($BaseTypeExpr{_} $Name{i1} = 0; $Name{i2} < $Expr{limit}; $Name{i3} ++) {
+      $Stmt{body}
     }
   } -> if i1.name == i2.name && i1.name == i3.name then ... else s
 | _ -> s
 end;
 ```
 
-Here pattern variables and wildcards of various types may be written as antiquotes (note the lack of brackets.)  Also note that a particular pattern variable may only appear once in a pattern, which may require additional equality checking on the right side of the pattern rule.
+Here pattern variables and wildcards of various types may be written as antiquotes.
+Also note that Silver does not support non-linear pattern matching, which means that a particular pattern variable may only appear once in a pattern.
+This may require additional equality checking on the right side of the pattern rule.
 
 ## Typedef Prototypes
 Due to the ambiguous nature of the C grammar and the infamous "lexer hack", knowledge of whether an identifier has previously been defined as a value or a typedef is often required during parsing.  As fragments of code involved in definitions may reference types defined in header files, some method of informing the lexer of all externally defined typedefs is needed.  To do this, the syntax `proto_typedef foo, bar, baz;` may be used at the start of any ableC block.  This has no semantic meaning, and only has an effect on how identifiers are parsed.  
 
 ## Additional Extensions
-When building an extension on other ableC extensions, it is useful to use their syntax in a similar way when constructing ASTs.  This can be done simply by including ableC extensions in the parser along side silver and silver-ableC.  The default composed version of Silver built by this repository contains several commonly useful extensions: ableC-closure, ableC-refcount-closure (transparent prefix `refcount`), and ableC-templating.  However, it is possible to write a custom artifact for Silver to build silver-ableC with a different set of extensions.  
+When building an extension on other ableC extensions, it is useful to use their syntax in a similar way when constructing ASTs.  This can be done simply by including ableC extensions in the parser along side silver and silver-ableC.  The default composed version of Silver built by this repository contains several commonly useful extensions, including ableC-closure, ableC-refcount-closure (transparent prefix `refcount`), ableC-templating, and ableC-algebraic-data-types (for the full list, see grammars/edu.umn.cs.melt.exts.silver.ableC/composed/with_all/Main.sv).  However, it is possible to write a custom artifact for Silver to build silver-ableC with a different set of extensions.  
