@@ -27,11 +27,12 @@ signficantly lowers the bar to entry into these efforts.
   ORCID: https://orcid.org/0000-0002-5611-8687
 
 ## Releases
-- Release 0.1.0: made in April, 2020
+- Release 0.1.0: made in September, 2019
+- Release 0.1.1: made in April, 2020
 
 ## Related publications
 
-Release 0.1.0 is discussed in the paper "Reflection of Terms in
+Release 0.1.1 is discussed in the paper "Reflection of Terms in
 Attribute Grammars: Design and Applications" by Lucas Kramer, Ted
 Kaminski, and Eric Van Wyk.  At the time of release this paper has
 been submitted to the Journal of Computer Languages (COLA).
@@ -39,8 +40,9 @@ been submitted to the Journal of Computer Languages (COLA).
 It is an extension of ``Reflection in Attribute Grammars'' by the same
 authors, presented at the 2019 ACM SIGPLAN
 International Conference on Generative Programming: Concepts &
-Experiences (GPCE).  See DOI https://doi.org/10.1145/3357765.3359517.
-
+Experiences (GPCE).
+See DOI https://doi.org/10.1145/3357765.3359517.
+This paper references release 0.1.0 of silver-ableC.
 
 ## More Information
 More documentation:
