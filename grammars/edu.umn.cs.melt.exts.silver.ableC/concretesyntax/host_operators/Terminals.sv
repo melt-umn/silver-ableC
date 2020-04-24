@@ -6,6 +6,12 @@ grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:host_operators;
   We resolve the resulting lexical ambiguities in favor of the overloadable
   terminals here with disambiguation functions, and expect the composition site
   to specify a transparent prefix for this grammar.
+  References to names present an issue, as these are overloaded but do not have
+  an operator that can be duplicated as a marking terminal.
+  Instead we introduce an empty marking terminal to prefix the identifier.
+  This marking terminal will usually fail to match due to maximal munch, but it
+  will still be prefixed by the transparent prefix assigned to this extension
+  grammar.
 -}
 
 -- Structural symbols
@@ -60,6 +66,9 @@ marking terminal HostNonEquality_t      '!=' precedence = 3, association = left,
 -- *crement operators
 marking terminal HostInc_t        '++'    lexer classes {Operator};
 marking terminal HostDec_t        '--'    lexer classes {Operator};
+
+-- Identifier references
+marking terminal HostId_t ''    lexer classes {Operator};
 
 -- Prefer the overloaded versions of all these by default
 disambiguate LParen_t, HostLParen_t { pluck LParen_t; }

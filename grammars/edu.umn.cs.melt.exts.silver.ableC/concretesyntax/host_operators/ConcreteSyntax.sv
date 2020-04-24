@@ -101,3 +101,8 @@ concrete productions top::PostfixOp_c
     { top.ast = memberExpr(top.expr, true, id.ast, location=top.exprLocation); }
 | '++'   { top.ast = postIncExpr(top.expr, location=top.exprLocation); }
 | '--'   { top.ast = postDecExpr(top.expr, location=top.exprLocation); }
+
+concrete productions top::PrimaryExpr_c
+| HostId_t id::Identifier_c
+  { top.ast = declRefExpr(id.ast, location=top.location);
+    top.directName = nothing(); }
