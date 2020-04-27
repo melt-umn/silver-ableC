@@ -6,6 +6,7 @@ parser svParse::Root {
   silver:host;
   
   edu:umn:cs:melt:exts:silver:ableC;
+  edu:umn:cs:melt:exts:silver:ableC:concretesyntax:host_operators prefix with "host";
 }
 
 function main 
