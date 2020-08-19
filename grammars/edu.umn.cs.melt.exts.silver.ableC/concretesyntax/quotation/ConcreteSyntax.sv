@@ -12,65 +12,65 @@ imports edu:umn:cs:melt:ableC:concretesyntax:construction;
 concrete productions top::Expr
 | 'ableC_Decls' '{' cst::TranslationUnit_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteDecls(foldDecl(cst.ast), location=top.location); }
+  { forwards to quoteDecls(foldDecl(cst.ast), location=getParsedOriginLocationOrFallback(top)); }
 | 'ableC_Decl' '{' cst::ExternalDeclaration_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteDecl(cst.ast, location=top.location); }
+  { forwards to quoteDecl(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
 | 'ableC_Decl' '{' ProtoTypedef_c cst::ExternalDeclaration_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteDecl(cst.ast, location=top.location); }
+  { forwards to quoteDecl(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
 | 'ableC_Parameters' '{' cst::ParameterList_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteParameters(foldParameterDecl(cst.ast), location=top.location); }
+  { forwards to quoteParameters(foldParameterDecl(cst.ast), location=getParsedOriginLocationOrFallback(top)); }
 | 'ableC_BaseTypeExpr' '{' cst::DeclarationSpecifiers_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
   {
     cst.givenQualifiers = cst.typeQualifiers;
-    forwards to quoteBaseTypeExpr(figureOutTypeFromSpecifiers(cst.location, cst.typeQualifiers, cst.preTypeSpecifiers, cst.realTypeSpecifiers, cst.mutateTypeSpecifiers), location=top.location);
+    forwards to quoteBaseTypeExpr(figureOutTypeFromSpecifiers(cst.typeQualifiers, cst.preTypeSpecifiers, cst.realTypeSpecifiers, cst.mutateTypeSpecifiers), location=getParsedOriginLocationOrFallback(top));
   }
 | 'ableC_Stmt' '{' cst::BlockItemList_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteStmt(foldStmt(cst.ast), location=top.location); }
+  { forwards to quoteStmt(foldStmt(cst.ast), location=getParsedOriginLocationOrFallback(top)); }
 | 'ableC_Expr' '{' cst::Expr_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteExpr(cst.ast, location=top.location); }
+  { forwards to quoteExpr(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
 | 'ableC_Expr' '{' ProtoTypedef_c cst::Expr_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteExpr(cst.ast, location=top.location); }
+  { forwards to quoteExpr(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
 
 concrete productions top::Pattern
 | 'ableC_Decls' BeginPattern_t '{' cst::TranslationUnit_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteDeclsPattern(foldDecl(cst.ast), location=top.location); }
+  { forwards to quoteDeclsPattern(foldDecl(cst.ast), location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
 | 'ableC_Decl' BeginPattern_t '{' cst::ExternalDeclaration_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteDeclPattern(cst.ast, location=top.location); }
+  { forwards to quoteDeclPattern(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
 | 'ableC_Decl' BeginPattern_t '{' ProtoTypedef_c cst::ExternalDeclaration_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteDeclPattern(cst.ast, location=top.location); }
+  { forwards to quoteDeclPattern(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
 | 'ableC_Parameters' BeginPattern_t '{' cst::ParameterList_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteParametersPattern(foldParameterDecl(cst.ast), location=top.location); }
+  { forwards to quoteParametersPattern(foldParameterDecl(cst.ast), location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
 | 'ableC_BaseTypeExpr' BeginPattern_t '{' cst::DeclarationSpecifiers_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
   {
     cst.givenQualifiers = cst.typeQualifiers;
-    forwards to quoteBaseTypeExprPattern(figureOutTypeFromSpecifiers(cst.location, cst.typeQualifiers, cst.preTypeSpecifiers, cst.realTypeSpecifiers, cst.mutateTypeSpecifiers), location=top.location);
+    forwards to quoteBaseTypeExprPattern(figureOutTypeFromSpecifiers(cst.typeQualifiers, cst.preTypeSpecifiers, cst.realTypeSpecifiers, cst.mutateTypeSpecifiers), location=getParsedOriginLocationOrFallback(top));
   }
   action { inPattern = false; }
 | 'ableC_Stmt' BeginPattern_t '{' cst::BlockItemList_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteStmtPattern(foldStmt(cst.ast), location=top.location); }
+  { forwards to quoteStmtPattern(foldStmt(cst.ast), location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
 | 'ableC_Expr' BeginPattern_t '{' cst::Expr_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteExprPattern(cst.ast, location=top.location); }
+  { forwards to quoteExprPattern(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
 | 'ableC_Expr' BeginPattern_t '{' ProtoTypedef_c cst::Expr_c '}'
   layout {LineComment_t, BlockComment_t, Spaces_t, NewLine_t}
-  { forwards to quoteExprPattern(cst.ast, location=top.location); }
+  { forwards to quoteExprPattern(cst.ast, location=getParsedOriginLocationOrFallback(top)); }
   action { inPattern = false; }
