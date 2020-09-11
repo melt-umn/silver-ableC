@@ -16,3 +16,7 @@ copper_mda testAntiquote(ablecParser) {
   silver:extension:list;
   silver:modification:let_fix;
 }
+
+copper_mda testHostOperators(ablecParser) {
+  edu:umn:cs:melt:exts:silver:ableC:concretesyntax:host_operators;
+}
