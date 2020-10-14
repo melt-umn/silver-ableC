@@ -133,7 +133,7 @@ abstract production antiquoteInitializer
 top::ableC:Initializer ::= e::Expr
 {
   top.pp = pp"$$Initializer{${text(e.unparse)}}";
-  forwards to ableC:objectInitializer(ableC:nilInit());
+  forwards to ableC:objectInitializer(ableC:nilInit(), location=builtin);
 }
 
 abstract production antiquoteExprs

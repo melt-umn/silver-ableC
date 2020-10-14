@@ -27,7 +27,7 @@ concrete productions top::Stmt_c
 concrete productions top::Initializer_c
 | '$Initializer' '{' e::Expr '}'
   layout {silver:definition:core:WhiteSpace, BlockComments, Comments}
-  { top.ast = antiquoteInitializer(e); }
+  { top.ast = antiquoteInitializer(e, location=top.location); }
 concrete productions top::PrimaryExpr_c
 | '$Exprs' '{' e::Expr '}'
   layout {silver:definition:core:WhiteSpace, BlockComments, Comments}
