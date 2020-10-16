@@ -106,3 +106,11 @@ concrete productions top::PrimaryExpr_c
 | HostId_t id::Identifier_c
   { top.ast = declRefExpr(id.ast, location=top.location);
     top.directName = nothing(); }
+
+concrete productions top::Initializer_c
+| '(' e::AssignExpr_c ')'
+    { top.ast = exprInitializer(e.ast, location=top.location); }
+| '{' il::InitializerList_c '}'
+    { top.ast = objectInitializer(foldInit(il.ast), location=top.location); }
+| '{' il::InitializerList_c ',' '}'
+    { top.ast = objectInitializer(foldInit(il.ast), location=top.location); }
