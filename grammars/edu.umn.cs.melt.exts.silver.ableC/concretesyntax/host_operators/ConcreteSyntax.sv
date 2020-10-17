@@ -86,6 +86,11 @@ concrete productions top::UnaryOp_c
 | '~'  { top.ast = bitNegateExpr(top.expr, location=top.location); }
 | '!'  { top.ast = notExpr(top.expr, location=top.location); }
 
+concrete productions top::PostfixExpr_c
+| '(' ty::TypeName_c ')' '{' il::InitializerList_c '}'
+    { top.ast = compoundLiteralExpr(ty.ast, foldInit(il.ast), location=top.location); }
+| '(' ty::TypeName_c ')' '{' il::InitializerList_c ',' '}'
+    { top.ast = compoundLiteralExpr(ty.ast, foldInit(il.ast), location=top.location); }
 concrete productions top::PostfixOp_c
 | '[' index::Expr_c ']'
     { top.ast = arraySubscriptExpr(top.expr, index.ast, location=top.location); }
