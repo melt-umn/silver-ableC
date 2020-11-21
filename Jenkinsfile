@@ -134,6 +134,7 @@ melt.trynode('silver-ableC') {
       "ableC-tensor-algebra",
       "ableC-cilk",
       "ableC-tutorials", "ableC-sample-projects",
+      "carbles-ai",
     ]
 
     def tasks = [:]
