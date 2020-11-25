@@ -150,7 +150,8 @@ melt.trynode('silver-ableC') {
     parallel tasks
   }
 
-  if (env.BRANCH_NAME == 'develop') {
+  if (env.BRANCH_NAME == 'develop' && params.ABLEC_BASE == 'ableC') {
+    // Only deploy jars for non-downstream builds on develop
     stage("Deploy") {
       dir(SILVER_ABLEC_BASE) {
         sh "cp jars/*.jar ${melt.ARTIFACTS}/"
