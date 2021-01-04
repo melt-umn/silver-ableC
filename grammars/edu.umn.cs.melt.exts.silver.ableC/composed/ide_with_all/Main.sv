@@ -3,14 +3,14 @@ grammar edu:umn:cs:melt:exts:silver:ableC:composed:ide_with_all;
 -- It depends on functions defined in that grammar, so we import it here, although that
 -- means that we also import (and build) those parser specs.
 -- This is annoying and should be refactored.     
-imports silver:composed:idetest;
+imports silver:compiler:composed:idetest;
 
-import silver:host;
-import silver:translation:java;
-import silver:driver;
+import silver:compiler:host;
+import silver:compiler:translation:java;
+import silver:compiler:driver;
 
-import silver:analysis:warnings:flow;
-import silver:analysis:warnings:exporting;
+import silver:compiler:analysis:warnings:flow;
+import silver:compiler:analysis:warnings:exporting;
 
 -- NOTE: this is needed for the correct generation of IDE, 
 -- even if we just use an empty IDE declaration block.

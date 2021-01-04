@@ -1,8 +1,7 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 
 imports silver:reflect;
-imports silver:metatranslation;
-imports core:monad;
+imports silver:compiler:metatranslation;
 
 aspect production nonterminalAST
 top::AST ::= prodName::String children::ASTs annotations::NamedASTs
@@ -86,7 +85,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_tname"])
     then
       case children, annotations of
-      | consAST(a, nilAST()), consNamedAST(namedAST("core:location", locAST), nilNamedAST()) ->
+      | consAST(a, nilAST()), consNamedAST(namedAST("silver:core:location", locAST), nilNamedAST()) ->
           case reify(a) of
           | right(e) ->
             just(
@@ -103,7 +102,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       end
     else case top of
     | AST {
-       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr(a, core:location=locAST)
+       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr(a, silver:core:location=locAST)
       } ->
       case reify(a) of
       | right(e) ->
@@ -115,7 +114,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
-        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr(a, core:location=locAST)
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr(a, silver:core:location=locAST)
       } ->
       case reify(a) of
       | right(e) ->

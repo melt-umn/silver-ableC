@@ -3,8 +3,8 @@ grammar edu:umn:cs:melt:exts:silver:ableC:abstractsyntax;
 --imports silver:langutil;
 imports silver:langutil:pp;
 
-imports silver:definition:core;
-imports silver:extension:patternmatching;
+imports silver:compiler:definition:core;
+imports silver:compiler:extension:patternmatching;
 
 imports edu:umn:cs:melt:ableC:abstractsyntax:host as ableC;
 
