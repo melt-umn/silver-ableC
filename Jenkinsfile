@@ -151,18 +151,16 @@ melt.trynode('silver-ableC') {
   }
 
   if (env.BRANCH_NAME == 'develop') {
-    stage("Deploy") {
-      // Only deploy jars for non-downstream builds or builds downstream from a non-downstream build
-      if (params.ABLEC_BASE == 'ableC' || // Non-downstream
-          // Downstream from ableC
-          (params.SILVER_BASE == silver.SILVER_WORKSPACE && params.ABLEC_BASE.contains('melt-umn_ableC_develop')) ||
-          // Downstream from Silver
-          params.SILVER_BASE.contains('melt-umn_silver_develop')) {
+    // Only deploy jars for non-downstream builds or builds downstream from a non-downstream build
+    if (params.ABLEC_BASE == 'ableC' || // Non-downstream
+        // Downstream from ableC
+        (params.SILVER_BASE == silver.SILVER_WORKSPACE && params.ABLEC_BASE.contains('melt-umn_ableC_develop')) ||
+        // Downstream from Silver
+        params.SILVER_BASE.contains('melt-umn_silver_develop')) {
+      stage("Deploy") {
         dir(SILVER_ABLEC_BASE) {
           sh "cp jars/*.jar ${melt.ARTIFACTS}/"
         }
-      } else {
-        echo "Skipping deploy for downstream build"
       }
     }
   }
