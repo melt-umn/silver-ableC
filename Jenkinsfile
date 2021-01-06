@@ -150,11 +150,15 @@ melt.trynode('silver-ableC') {
     parallel tasks
   }
 
-  if (env.BRANCH_NAME == 'develop' && params.ABLEC_BASE == 'ableC') {
-    // Only deploy jars for non-downstream builds on develop
+  if (env.BRANCH_NAME == 'develop') {
     stage("Deploy") {
-      dir(SILVER_ABLEC_BASE) {
-        sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+      // Only deploy jars for non-downstream builds on develop or downstream builds from silver/develop
+      if (params.ABLEC_BASE == 'ableC' || params.SILVER_BASE.contains('melt-umn_silver_develop')) {
+        dir(SILVER_ABLEC_BASE) {
+          sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+        }
+      } else {
+        echo "Skipping deploy for downstream build"
       }
     }
   }
