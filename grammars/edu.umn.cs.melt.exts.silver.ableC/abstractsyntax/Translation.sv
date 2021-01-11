@@ -79,8 +79,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     if
       -- These 2 are split out seperate to avoid duplicating code, because they
       -- are handled in the same way.
-      containsBy(
-        stringEq, prodName,
+      contains(prodName,
         ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_name",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_tname"])
     then
@@ -146,8 +145,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       end
     | _ ->
       if
-        containsBy(
-          stringEq, prodName,
+        containsBy(prodName,
           ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr",
            "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr",
            "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr"])
