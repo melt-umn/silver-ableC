@@ -9,10 +9,10 @@ lexer class Antiquote
     -- and 1 pattern antiquote terminal.
     if (inPattern)
       -- Pick the pattern antiquote terminal
-      pluck head(intersectBy(terminalIdEq, shiftable, PatternAntiquote));
+      pluck head(intersect(shiftable, PatternAntiquote));
     else
       -- Pick the expression antiquote terminal
-      pluck head(intersectBy(terminalIdEq, shiftable, ExprAntiquote));
+      pluck head(intersect(shiftable, ExprAntiquote));
   },
   font=font_antiquote;
 

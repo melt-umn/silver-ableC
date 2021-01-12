@@ -145,7 +145,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       end
     | _ ->
       if
-        containsBy(prodName,
+        contains(prodName,
           ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr",
            "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr",
            "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr"])
