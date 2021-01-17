@@ -88,11 +88,13 @@ melt.trynode('silver-ableC') {
             // An error occured, fall back to bootstrapping
             echo "Self-compile build failure, falling back to bootstrap build"
             melt.annotate("Self-compile failure.")
-            // Don't leave results of failed self-compile behind when we try bootstrapping
-            melt.clearGenerated()
             bootstrapRequired = true
           }
         }
+      }
+      if (bootstrapRequired) {
+        // Don't leave results of failed self-compile behind for when we try bootstrapping
+        melt.clearGenerated()
       }
     }
 
