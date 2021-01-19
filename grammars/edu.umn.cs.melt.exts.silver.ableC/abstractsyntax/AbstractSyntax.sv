@@ -12,84 +12,84 @@ imports edu:umn:cs:melt:ableC:abstractsyntax:host as ableC;
 abstract production quoteDecls
 top::Expr ::= ast::ableC:Decls
 {
-  top.unparse = s"ableC_Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
+  top.unparse = s"ableC_Decls {${concat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production quoteDecl
 top::Expr ::= ast::ableC:Decl
 {
-  top.unparse = s"ableC_Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_Decl {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production quoteParameters
 top::Expr ::= ast::ableC:Parameters
 {
-  top.unparse = s"ableC_Parameters {${sconcat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
+  top.unparse = s"ableC_Parameters {${concat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production quoteBaseTypeExpr
 top::Expr ::= ast::ableC:BaseTypeExpr
 {
-  top.unparse = s"ableC_BaseTypeExpr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_BaseTypeExpr {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production quoteStmt
 top::Expr ::= ast::ableC:Stmt
 {
-  top.unparse = s"ableC_Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_Stmt {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production quoteExpr
 top::Expr ::= ast::ableC:Expr
 {
-  top.unparse = s"ableC_Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_Expr {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translate(top.location, reflect(new(ast)));
 }
 
 abstract production quoteDeclsPattern
 top::Pattern ::= ast::ableC:Decls
 {
-  top.unparse = s"ableC_Decls {${sconcat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
+  top.unparse = s"ableC_Decls {${concat(explode("\n", show(80, ppImplode(line(), ast.pps))))}}";
   forwards to translatePattern(top.location, reflect(new(ast)));
 }
 
 abstract production quoteDeclPattern
 top::Pattern ::= ast::ableC:Decl
 {
-  top.unparse = s"ableC_Decl {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_Decl {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translatePattern(top.location, reflect(new(ast)));
 }
 
 abstract production quoteParametersPattern
 top::Pattern ::= ast::ableC:Parameters
 {
-  top.unparse = s"ableC_Parameters {${sconcat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
+  top.unparse = s"ableC_Parameters {${concat(explode("\n", show(80, ppImplode(pp", ", ast.pps))))}}";
   forwards to translatePattern(top.location, reflect(new(ast)));
 }
 
 abstract production quoteBaseTypeExprPattern
 top::Pattern ::= ast::ableC:BaseTypeExpr
 {
-  top.unparse = s"ableC_BaseTypeExpr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_BaseTypeExpr {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translatePattern(top.location, reflect(new(ast)));
 }
 
 abstract production quoteStmtPattern
 top::Pattern ::= ast::ableC:Stmt
 {
-  top.unparse = s"ableC_Stmt {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_Stmt {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translatePattern(top.location, reflect(new(ast)));
 }
 
 abstract production quoteExprPattern
 top::Pattern ::= ast::ableC:Expr
 {
-  top.unparse = s"ableC_Expr {${sconcat(explode("\n", show(80, ast.pp)))}}";
+  top.unparse = s"ableC_Expr {${concat(explode("\n", show(80, ast.pp)))}}";
   forwards to translatePattern(top.location, reflect(new(ast)));
 }
 
