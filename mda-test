@@ -1,7 +1,8 @@
-
 #!/bin/bash
 
 ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
+
+export SVJVM_FLAGS="-Xmx6G -Xss15M"
 
 mkdir -p build
 cd build
