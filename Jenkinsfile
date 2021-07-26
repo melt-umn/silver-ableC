@@ -139,6 +139,7 @@ melt.trynode('silver-ableC') {
       "ableC-cilk",
       "ableC-tutorials", "ableC-sample-projects",
       "carbles-ai",
+      "ableC-parallel"
     ]
 
     def tasks = [:]
