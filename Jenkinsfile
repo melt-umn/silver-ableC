@@ -110,6 +110,7 @@ melt.trynode('silver-ableC') {
     // Upon succeeding at initial build, archive for future builds
     dir(SILVER_ABLEC_BASE) {
       archiveArtifacts(artifacts: "jars/*.jar", fingerprint: true)
+      melt.archiveCommitArtifacts("jars/*.jar")
     }
   }
 
