@@ -39,7 +39,7 @@ melt.trynode('silver-ableC') {
         submoduleCfg: scm.submoduleCfg,
         userRemoteConfigs: scm.userRemoteConfigs])
 
-    // Get dependancies of silver-ableC
+    // Get dependencies of silver-ableC
     def ext_dependencies = [
       "ableC-closure",
       "ableC-refcount-closure",
@@ -110,7 +110,11 @@ melt.trynode('silver-ableC') {
     // Upon succeeding at initial build, archive for future builds
     dir(SILVER_ABLEC_BASE) {
       archiveArtifacts(artifacts: "jars/*.jar", fingerprint: true)
-      melt.archiveCommitArtifacts("jars/*.jar")
+      def silverCommit = sh(
+        script: "cd ${SILVER_BASE}; git rev-parse HEAD",
+        returnStdout: true
+      )
+      melt.archiveCommitArtifacts("jars/*.jar", silverCommit)
     }
   }
 
