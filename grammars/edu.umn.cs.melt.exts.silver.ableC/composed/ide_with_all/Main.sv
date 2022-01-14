@@ -21,7 +21,7 @@ import edu:umn:cs:melt:exts:silver:ableC:composed:with_all only svParse;
 
 -- This function is not used by IDE
 function main 
-IOVal<Integer> ::= args::[String] ioin::IO
+IOVal<Integer> ::= args::[String] ioin::IOToken
 {
   return cmdLineRun(args, svParse, ioin);
 }
@@ -51,7 +51,7 @@ temp_imp_ide_dcl svParse ".sv" {
 -- from silver:composed:idetest.
 
 function analyze
-IOVal<[Message]> ::= project::IdeProject  args::[IdeProperty]  i::IO
+IOVal<[Message]> ::= project::IdeProject  args::[IdeProperty]  i::IOToken
 {
   local argio :: IOVal<[String]> = getArgStrings(args, project, i);
 
@@ -61,7 +61,7 @@ IOVal<[Message]> ::= project::IdeProject  args::[IdeProperty]  i::IO
 }
 
 function generate
-IOVal<[Message]> ::= project::IdeProject  args::[IdeProperty]  i::IO
+IOVal<[Message]> ::= project::IdeProject  args::[IdeProperty]  i::IOToken
 {
   local argio :: IOVal<[String]> = getArgStrings(args, project, i);
 
