@@ -13,7 +13,7 @@ copper_mda testAntiquote(ablecParser) {
   edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
   silver:compiler:host:core;
   silver:compiler:extension:patternmatching;
-  silver:compiler:extension:list;
+  silver:compiler:modification:list;
   silver:compiler:modification:let_fix;
 }
 
