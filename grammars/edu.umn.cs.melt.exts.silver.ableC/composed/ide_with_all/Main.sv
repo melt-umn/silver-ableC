@@ -23,7 +23,7 @@ import edu:umn:cs:melt:exts:silver:ableC:composed:with_all only svParse;
 function main 
 IOVal<Integer> ::= args::[String] ioin::IOToken
 {
-  return cmdLineRun(args, svParse, ioin);
+  return evalIO(cmdLineRun(args, svParse), ioin);
 }
 
 -- IDE declaration block
