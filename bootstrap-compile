@@ -9,7 +9,7 @@ SILVER_ABLEC_BASE=$(pwd)
 INCLUDE_DIRS=($ABLEC_BASE/grammars $EXTS_BASE/*/grammars $SILVER_ABLEC_BASE/grammars)
 INCLUDES=${INCLUDE_DIRS[@]/#/-I }
 
-export SVJVM_FLAGS="-Xmx8G -Xss15M"
+export SVJVM_FLAGS="-Xmx9G -Xss15M"
 
 mkdir -p jars
 mkdir -p build
