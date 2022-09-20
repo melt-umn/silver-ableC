@@ -2,7 +2,6 @@ grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
 
 imports edu:umn:cs:melt:exts:silver:ableC:concretesyntax:quotation;
 
-temp_imp_ide_font font_antiquote color(123, 0, 82) bold italic;
 lexer class Antiquote
   disambiguate {
     -- Ambiguities between antiquote terminals should consist of 1 expression
@@ -13,8 +12,7 @@ lexer class Antiquote
     else
       -- Pick the expression antiquote terminal
       pluck head(intersect(shiftable, ExprAntiquote));
-  },
-  font=font_antiquote;
+  };
 
 lexer class ExprAntiquote extends Antiquote;
 lexer class PatternAntiquote extends Antiquote;
