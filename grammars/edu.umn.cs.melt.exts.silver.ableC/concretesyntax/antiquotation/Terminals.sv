@@ -3,7 +3,6 @@ grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
 imports silver:langutil:lsp as lsp;
 imports edu:umn:cs:melt:exts:silver:ableC:concretesyntax:quotation;
 
-temp_imp_ide_font font_antiquote color(123, 0, 82) bold italic;
 lexer class Antiquote
   disambiguate {
     -- Ambiguities between antiquote terminals should consist of 1 expression
@@ -15,8 +14,7 @@ lexer class Antiquote
       -- Pick the expression antiquote terminal
       pluck head(intersect(shiftable, ExprAntiquote));
   },
-  extends {lsp:Macro}, -- Why not? 
-  font=font_antiquote;
+  extends {lsp:Macro}; -- Why not?
 
 lexer class ExprAntiquote extends Antiquote;
 lexer class PatternAntiquote extends Antiquote;
