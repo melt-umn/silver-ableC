@@ -1,5 +1,6 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
 
+imports silver:langutil:lsp as lsp;
 imports edu:umn:cs:melt:exts:silver:ableC:concretesyntax:quotation;
 
 lexer class Antiquote
@@ -12,7 +13,8 @@ lexer class Antiquote
     else
       -- Pick the expression antiquote terminal
       pluck head(intersect(shiftable, ExprAntiquote));
-  };
+  },
+  extends {lsp:Macro}; -- Why not?
 
 lexer class ExprAntiquote extends Antiquote;
 lexer class PatternAntiquote extends Antiquote;
