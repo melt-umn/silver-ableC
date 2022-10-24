@@ -92,6 +92,10 @@ melt.trynode('silver-ableC') {
           }
         }
       }
+      if (bootstrapRequired) {
+        // Don't leave results of failed self-compile behind for when we try bootstrapping
+        melt.clearGenerated()
+      }
     }
 
     // Perform a full bootstrap build, if required
@@ -106,6 +110,7 @@ melt.trynode('silver-ableC') {
     // Upon succeeding at initial build, archive for future builds
     dir(SILVER_ABLEC_BASE) {
       archiveArtifacts(artifacts: "jars/*.jar", fingerprint: true)
+      melt.archiveCommitArtifacts("jars/*.jar")
     }
   }
 
@@ -133,7 +138,9 @@ melt.trynode('silver-ableC') {
       "ableC-halide",
       "ableC-tensor-algebra",
       "ableC-cilk",
+      "ableC-parallel",
       "ableC-tutorials", "ableC-sample-projects",
+      "carbles-ai"
     ]
 
     def tasks = [:]
@@ -150,9 +157,16 @@ melt.trynode('silver-ableC') {
   }
 
   if (env.BRANCH_NAME == 'develop') {
-    stage("Deploy") {
-      dir(SILVER_ABLEC_BASE) {
-        sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+    // Only deploy jars for non-downstream builds or builds downstream from a non-downstream build
+    if (params.ABLEC_BASE == 'ableC' || // Non-downstream
+        // Downstream from ableC
+        (params.SILVER_BASE == silver.SILVER_WORKSPACE && params.ABLEC_BASE.contains('melt-umn_ableC_develop')) ||
+        // Downstream from Silver
+        params.SILVER_BASE.contains('melt-umn_silver_develop')) {
+      stage("Deploy") {
+        dir(SILVER_ABLEC_BASE) {
+          sh "cp jars/*.jar ${melt.ARTIFACTS}/"
+        }
       }
     }
   }
