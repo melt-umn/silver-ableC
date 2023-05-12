@@ -137,11 +137,11 @@ melt.trynode('silver-ableC') {
       "ableC-unification", "ableC-prolog", "ableC-rewriting",
       "ableC-halide",
       "ableC-tensor-algebra",
-      "ableC-cilk",
-      "ableC-parallel",
       "ableC-tutorials", "ableC-sample-projects",
       "carbles-ai"
     ]
+    // Currently not maintained: 
+    // "ableC-cilk", "ableC-parallel",
 
     def tasks = [:]
     def newargs = [SILVER_BASE: SILVER_BASE,
