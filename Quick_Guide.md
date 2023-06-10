@@ -36,6 +36,7 @@ ableC_Decl {
   }
 }
 ```
+Note that no append is needed when the collection antiquote is the last item in the list, as with `moreParams` above.
 
 A number of common antiquote idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
 
