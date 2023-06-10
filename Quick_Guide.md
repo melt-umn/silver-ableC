@@ -36,7 +36,9 @@ ableC_Decl {
   }
 }
 ```
-Note that no append is needed when the collection antiquote is the last item in the list, as with `moreParams` above.
+Note that an append is only needed when the collection antiquote isn't the last item in the list.
+With `params` and `args` above, we need to use `appendParams` and `appendExprs` to append extra items to the antiquoted expressions,
+but with `moreParams` and `moreArgs` we can just place them end of the cons chain instead of `nilParameters()`/`nilExpr()`.
 
 A number of common antiquote idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
 
