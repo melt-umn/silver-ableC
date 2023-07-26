@@ -86,7 +86,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
                   makeQName("edu:umn:cs:melt:ableC:abstractsyntax:host:name", givenLocation),
                   location=givenLocation),
                 [e],
-                [pair("location", locAST.translation)]))
+                [("location", locAST.translation)]))
           | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
           end
       | _, _ -> error(s"Unexpected antiquote production arguments: ${show(80, top.pp)}")
