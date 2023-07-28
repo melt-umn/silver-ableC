@@ -1,6 +1,6 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:mda_test;
 
-imports silver:composed:Default;
+imports silver:compiler:composed:Default;
 imports edu:umn:cs:melt:ableC:host;
 
 copper_mda testQuote(svParse) {
@@ -11,10 +11,10 @@ copper_mda testQuote(svParse) {
 
 copper_mda testAntiquote(ablecParser) {
   edu:umn:cs:melt:exts:silver:ableC:concretesyntax:antiquotation;
-  silver:host:core;
-  silver:extension:patternmatching;
-  silver:extension:list;
-  silver:modification:let_fix;
+  silver:compiler:host:core;
+  silver:compiler:extension:patternmatching;
+  silver:compiler:modification:list;
+  silver:compiler:modification:let_fix;
 }
 
 copper_mda testHostOperators(ablecParser) {

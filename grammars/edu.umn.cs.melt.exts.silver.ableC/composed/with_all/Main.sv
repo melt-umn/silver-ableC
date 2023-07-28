@@ -1,9 +1,9 @@
 grammar edu:umn:cs:melt:exts:silver:ableC:composed:with_all;
 
-import silver:host;
+import silver:compiler:host;
 
 parser svParse::Root {
-  silver:host;
+  silver:compiler:host;
   
   edu:umn:cs:melt:exts:silver:ableC;
   edu:umn:cs:melt:exts:silver:ableC:concretesyntax:host_operators prefix with "host";
@@ -33,7 +33,7 @@ parser svParse::Root {
 }
 
 function main 
-IOVal<Integer> ::= args::[String] ioin::IO
+IOVal<Integer> ::= args::[String] ioin::IOToken
 {
-  return cmdLineRun(args, svParse, ioin);
+  return evalIO(cmdLineRun(args, svParse), ioin);
 }

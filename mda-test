@@ -1,9 +1,10 @@
-
 #!/bin/bash
 
 ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
 
+export SVJVM_FLAGS="-Xmx8G -Xss15M"
+
 mkdir -p build
 cd build
 
-silver -I ../grammars -I $ABLEC_BASE/grammars $@ edu:umn:cs:melt:exts:silver:ableC:mda_test
+silver -I ../grammars -I $ABLEC_BASE/grammars --dont-translate $@ edu:umn:cs:melt:exts:silver:ableC:mda_test

@@ -17,6 +17,7 @@ grammar edu:umn:cs:melt:exts:silver:ableC:concretesyntax:host_operators;
 -- Structural symbols
 marking terminal HostLParen_t      '('    lexer classes {Operator};
 marking terminal HostLBracket_t    '['    lexer classes {Operator};
+marking terminal HostLCurly_t      '{'    lexer classes {Operator}, action { context = head(context) :: context; };
 
 -- Member operators
 marking terminal HostDot_t         '.'    lexer classes {Operator};
@@ -73,6 +74,7 @@ marking terminal HostId_t ''    lexer classes {Operator};
 -- Prefer the overloaded versions of all these by default
 disambiguate LParen_t, HostLParen_t { pluck LParen_t; }
 disambiguate LBracket_t, HostLBracket_t { pluck LBracket_t; }
+disambiguate LCurly_t, HostLCurly_t { pluck LCurly_t; }
 disambiguate Dot_t, HostDot_t { pluck Dot_t; }
 disambiguate PtrDot_t, HostPtrDot_t { pluck PtrDot_t; }
 disambiguate Assign_t, HostAssign_t { pluck Assign_t; }

@@ -86,6 +86,11 @@ concrete productions top::UnaryOp_c
 | '~'  { top.ast = bitNegateExpr(top.expr); }
 | '!'  { top.ast = notExpr(top.expr); }
 
+concrete productions top::PostfixExpr_c
+| '(' ty::TypeName_c ')' LCurly_t il::InitializerList_c '}'
+    { top.ast = compoundLiteralExpr(ty.ast, foldInit(il.ast)); }
+| '(' ty::TypeName_c ')' LCurly_t il::InitializerList_c ',' '}'
+    { top.ast = compoundLiteralExpr(ty.ast, foldInit(il.ast)); }
 concrete productions top::PostfixOp_c
 | '[' index::Expr_c ']'
     { top.ast = arraySubscriptExpr(top.expr, index.ast); }
@@ -106,3 +111,11 @@ concrete productions top::PrimaryExpr_c
 | HostId_t id::Identifier_c
   { top.ast = declRefExpr(id.ast);
     top.directName = nothing(); }
+
+concrete productions top::Initializer_c
+| '(' e::AssignExpr_c ')'
+    { top.ast = exprInitializer(e.ast); }
+| '{' il::InitializerList_c '}'
+    { top.ast = objectInitializer(foldInit(il.ast)); }
+| '{' il::InitializerList_c ',' '}'
+    { top.ast = objectInitializer(foldInit(il.ast)); }
