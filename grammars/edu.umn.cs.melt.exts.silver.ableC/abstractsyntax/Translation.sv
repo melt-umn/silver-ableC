@@ -75,25 +75,22 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
         ["edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_name",
          "edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquote_tname"])
     then
-      case children, annotations of
-      | consAST(a, nilAST()), consNamedAST(namedAST("silver:core:location", locAST), nilNamedAST()) ->
+      case children of
+      | consAST(a, nilAST()) ->
           case reify(a) of
           | right(e) ->
             just(
-              mkFullFunctionInvocation(
+              mkStrFunctionInvocation(
                 givenLocation,
-                baseExpr(
-                  makeQName("edu:umn:cs:melt:ableC:abstractsyntax:host:name", givenLocation),
-                  location=givenLocation),
-                [e],
-                [("location", locAST.translation)]))
+                "edu:umn:cs:melt:ableC:abstractsyntax:host:name",
+                [e]))
           | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
           end
-      | _, _ -> error(s"Unexpected antiquote production arguments: ${show(80, top.pp)}")
+      | _ -> error(s"Unexpected antiquote production arguments: ${show(80, top.pp)}")
       end
     else case top of
     | AST {
-       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr(a, silver:core:location=locAST)
+       edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr(a)
       } ->
       case reify(a) of
       | right(e) ->
@@ -101,11 +98,11 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
           mkStrFunctionInvocation(
             givenLocation,
             "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst",
-            [e, locAST.translation]))
+            [e]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
-        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr(a, silver:core:location=locAST)
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr(a)
       } ->
       case reify(a) of
       | right(e) ->
@@ -113,11 +110,11 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
           mkStrFunctionInvocation(
             givenLocation,
             "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst",
-            [e, locAST.translation]))
+            [e]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
-        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr(qualifiersAST, a, locAST)
+        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr(qualifiersAST, a)
       } ->
       case reify(a) of
       | right(e) ->

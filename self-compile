@@ -11,7 +11,7 @@ INCLUDES=${INCLUDE_DIRS[@]/#/-I }
 
 SV_BUILD_TARGET=${SV_BUILD_TARGET:-"edu:umn:cs:melt:exts:silver:ableC:composed:with_all"}
 
-export SVJVM_FLAGS="-Xmx8G -Xss15M"
+export SVJVM_FLAGS="-Xmx10G -Xss15M"
 
 mkdir -p build
 cd build
