@@ -26,7 +26,3 @@ mv edu.umn.cs.melt.exts.silver.ableC.composed.with_base.jar ../jars/
 echo "Building Silver + ableC + all extensions with Silver + ableC + base extensions ..."
 silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_base.jar $INCLUDES $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_all
 mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
-
-echo "Building Silver + ableC + all extensions with Silver + ableC + all extensions ..."
-silver-custom ../jars/edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar $INCLUDES --one-jar --clean $@ edu:umn:cs:melt:exts:silver:ableC:composed:with_all
-mv edu.umn.cs.melt.exts.silver.ableC.composed.with_all.jar ../jars/
