@@ -84,7 +84,7 @@ melt.trynode('silver-ableC') {
     if (!bootstrapRequired) {
       withEnv(newenv) {
         dir(SILVER_ABLEC_BASE) {
-          if (sh(script: './self-compile', returnStatus: true) != 0) {
+          if (sh(script: './self-compile --one-jar', returnStatus: true) != 0) {
             // An error occured, fall back to bootstrapping
             echo "Self-compile build failure, falling back to bootstrap build"
             melt.annotate("Self-compile failure.")
@@ -103,6 +103,8 @@ melt.trynode('silver-ableC') {
       withEnv(newenv) {
         dir(SILVER_ABLEC_BASE) {
           sh './bootstrap-compile'
+          // Perform another clean rebuild to ensure that we have a working fixpoint
+          sh "./self-compile --clean --one-jar"
         }
       }
     }
