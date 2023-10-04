@@ -79,11 +79,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | consAST(a, nilAST()) ->
           case reify(a) of
           | right(e) ->
-            just(
-              mkStrFunctionInvocation(
-                givenLocation,
-                "edu:umn:cs:melt:ableC:abstractsyntax:host:name",
-                [e]))
+            just(mkStrFunctionInvocation("edu:umn:cs:melt:ableC:abstractsyntax:host:name", [e]))
           | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
           end
       | _ -> error(s"Unexpected antiquote production arguments: ${show(80, top.pp)}")
@@ -94,11 +90,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       } ->
       case reify(a) of
       | right(e) ->
-        just(
-          mkStrFunctionInvocation(
-            givenLocation,
-            "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst",
-            [e]))
+        just(mkStrFunctionInvocation("edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst", [e]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
@@ -106,11 +98,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       } ->
       case reify(a) of
       | right(e) ->
-        just(
-          mkStrFunctionInvocation(
-            givenLocation,
-            "edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst",
-            [e]))
+        just(mkStrFunctionInvocation("edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst", [e]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
     | AST {
@@ -120,15 +108,12 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
       | right(e) ->
         just(
           mkStrFunctionInvocation(
-            givenLocation, "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
+            "edu:umn:cs:melt:ableC:abstractsyntax:host:directTypeExpr",
             [mkStrFunctionInvocation(
-               givenLocation,
                "edu:umn:cs:melt:ableC:abstractsyntax:host:addQualifiers",
                [access(
                   qualifiersAST.translation, '.',
-                  qNameAttrOccur(
-                    makeQName("qualifiers", givenLocation), location=givenLocation),
-                  location=givenLocation),
+                  qNameAttrOccur(makeQName("qualifiers", givenLocation))),
                 e])]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
       end
