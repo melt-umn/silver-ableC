@@ -77,7 +77,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     then
       case children of
       | consAST(a, nilAST()) ->
-          case reify(a) of
+          case reify(^a) of
           | right(e) ->
             just(mkStrFunctionInvocation("edu:umn:cs:melt:ableC:abstractsyntax:host:name", [e]))
           | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
@@ -88,7 +88,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | AST {
        edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteIntLiteralExpr(a)
       } ->
-      case reify(a) of
+      case reify(^a) of
       | right(e) ->
         just(mkStrFunctionInvocation("edu:umn:cs:melt:ableC:abstractsyntax:construction:mkIntConst", [e]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
@@ -96,7 +96,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | AST {
         edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteStringLiteralExpr(a)
       } ->
-      case reify(a) of
+      case reify(^a) of
       | right(e) ->
         just(mkStrFunctionInvocation("edu:umn:cs:melt:ableC:abstractsyntax:construction:mkStringConst", [e]))
       | left(msg) -> error(s"Error in reifying child of production ${prodName}:\n${msg}")
@@ -104,7 +104,7 @@ top::AST ::= prodName::String children::ASTs annotations::NamedASTs
     | AST {
         edu:umn:cs:melt:exts:silver:ableC:abstractsyntax:antiquoteDirectTypeExpr(qualifiersAST, a)
       } ->
-      case reify(a) of
+      case reify(^a) of
       | right(e) ->
         just(
           mkStrFunctionInvocation(

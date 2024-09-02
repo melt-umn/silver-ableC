@@ -4,7 +4,6 @@ ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
 
 export SVJVM_FLAGS="-Xmx8G -Xss15M"
 
-mkdir -p build
-cd build
+export GRAMMAR_PATH=$ABLEC_BASE/ableC.jar:silver-ableC.jar:grammars
 
-silver -I ../grammars -I $ABLEC_BASE/grammars --dont-translate $@ edu:umn:cs:melt:exts:silver:ableC:mda_test
+silver --dont-translate $@ edu:umn:cs:melt:exts:silver:ableC:mda_test

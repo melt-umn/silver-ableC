@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
+
+export GRAMMAR_PATH=$ABLEC_BASE/ableC.jar:grammars
+
+if [ ! -f $ABLEC_BASE/ableC.jar ]; then
+    echo "ableC.jar not found in $ABLEC_BASE"
+    exit 1
+fi
+
+silver -o silver-ableC.jar $@ edu:umn:cs:melt:exts:silver:ableC
