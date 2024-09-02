@@ -6,6 +6,9 @@ ABLEC_BASE=$(cd ${ABLEC_BASE:-../../ableC} && pwd)
 
 export GRAMMAR_PATH=$ABLEC_BASE/ableC.jar:grammars
 
+mkdir -p generated
+export SILVER_GEN=generated
+
 if [ ! -f $ABLEC_BASE/ableC.jar ]; then
     echo "ableC.jar not found in $ABLEC_BASE"
     exit 1

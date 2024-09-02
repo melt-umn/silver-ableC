@@ -2,3 +2,4 @@
 build.xml
 *.copperdump.html
 *.jar
+generated/
