@@ -42,13 +42,13 @@ but with `moreParams` and `moreArgs` we can just place them end of the cons chai
 
 A number of common antiquote idioms have been found, for which short-hands have been introduced (also providing more accurate locations):
 
-Idiom                                                                                                 | Shorthand
------------------------------------------------------------------------------------------------------ | --------------------
-`$Expr{realConstant(integerConstant(toString(i), false, noIntSuffix(), location=...), location=...)}` | `$intLiteralExpr{i}`
-`$Expr{stringLiteral("\"" ++ escapeString(s) ++ "\"", location=...)}`                                 | `$stringLiteralExpr{s}`
-`$Name{name(n, location=...)}`                                                                        | `$name{n}`
-`$TName{name(n, location=...)}`                                                                       | `$tname{n}`
-`$BaseTypeExpr{directTypeExpr(t)}`                                                                    | `$directTypeExpr{t}`
+Idiom                                                                     | Shorthand
+------------------------------------------------------------------------- | --------------------
+`$Expr{realConstant(integerConstant(toString(i), false, noIntSuffix()))}` | `$intLiteralExpr{i}`
+`$Expr{stringLiteral("\"" ++ escapeString(s) ++ "\"")}`                   | `$stringLiteralExpr{s}`
+`$Name{name(n)}`                                                          | `$name{n}`
+`$TName{name(n)}`                                                         | `$tname{n}`
+`$BaseTypeExpr{directTypeExpr(t)}`                                        | `$directTypeExpr{t}`
 
 ## Pattern matching
 Instead of constructing abstract syntax trees, occasionally we instead wish to deconstruct them by pattern matching, for example to perform a transformation on a particular combination of host-langauge features
