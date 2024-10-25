@@ -1,5 +1,7 @@
 # The ableC extension to Silver: silver-ableC
 
+**NOTE: this extension has been merged [into the ableC repository](https://github.com/melt-umn/ableC/tree/feature/include-jar/grammars/edu.umn.cs.melt.ableC/silverconstruction); this repository is now archived.**
+
 This extension to Silver allows ableC extension writers to express
 complex ASTs by writing C code directly using its concrete syntax,
 instead of manually writing complex expressions over its abstract
